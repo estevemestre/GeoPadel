@@ -50,6 +50,16 @@ const bot = new Telegraf(config.secret_token);
 //bot.start((ctx) => ctx.reply("asdas"));
 
 bot.start((ctx) => {
+//    console.log(ctx.message);
+    
+   const chatId = ctx.chat.id;
+   console.log("Id usuario:", chatId); 
+   
+   const chatNombre = ctx.chat.username;
+   console.log("Nombre usuario:", chatNombre);  
+      
+    
+    
     var ret = [];
     //consulta  buscar partides
 //    let a = consulta(); // Buca les partides
@@ -90,12 +100,19 @@ bot.start((ctx) => {
     });
 });
 bot.use((ctx, next) => {
+    
+
+    
     const start = new Date();
     return next(ctx).then(() => {
         const ms = new Date() - start;
         console.log('Response time %sms', ms);
     });
 });
+
+
+
+
 bot.on('text', (ctx) => ctx.reply('Hello World'));
 // Si nos envia sticket, pulgar arriba
 bot.on('sticker', (ctx) => ctx.reply('👍'));
