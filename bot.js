@@ -9,23 +9,13 @@ const dataService = require('./dataService');
 
 const bot = new Telegraf(config.botToken);
 
-const helpMsg = `Command reference:
-/start - Start bot (mandatory in groups)
-/inc - Increment default counter
-/inc1 - Increment counter 1
-/incx - Increment counter x (replace x with any number)
-/dec - Decrement counter
-/decx - Decrement counter x
-/reset - Reset counter back to 0
-/resetx - Reset counter x back to 0
-/set y - Set counter to y [/set y]
-/setx y - Set counter x to y [/setx y]
-/get - Show current counter
-/getx - Show value of counter x
-/getall - Show all counters
-/stop - Attemt to stop bot
-/about - Show information about the bot
-/help - Show this help page
+const helpMsg = `Ajuda:
+/start - Inici del bot
+/user - Informació usuari
+/setuser - Modificar informació del usuari
+/partides - Numero de partides creades que hi han
+/crear - Crear una nova partida
+
 
 Tip: You can also use e.g. '/inc2 5' to increase counter two by five counts.`;
 
