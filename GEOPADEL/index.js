@@ -50,59 +50,59 @@ const bot = new Telegraf(config.secret_token);
 //bot.start((ctx) => ctx.reply("asdas"));
 
 bot.start((ctx) => {
-//    console.log(ctx.message);
-    
-   const chatId = ctx.chat.id;
-   console.log("Id usuario:", chatId); 
-   
-   const chatNombre = ctx.chat.username;
-   console.log("Nombre usuario:", chatNombre);  
-      
     
     
+
+//    console.log("ctx", ctx);
+//    console.log("********************");
+//    console.log("ctx message ", ctx.message);
+
+    const chatId = ctx.chat.id;
+    console.log("Id usuario:", chatId);
+
+    const chatNombre = ctx.chat.username;
+    console.log("Nombre usuario:", chatNombre);
+
+
     var ret = [];
-    //consulta  buscar partides
-//    let a = consulta(); // Buca les partides
-//    let ab = consulta().toString(); // Buca les partides
-//    console.log("a" + a);
-//    console.log("b" + ab);
-//    ctx.reply("sadassd");
     con.query("SELECT * FROM users", function (err, result, fields) {
         if (err)
             throw err;
-        
+
         Object.keys(result).forEach(function (key) {
             var row = result[key];
             console.log(row.nombre);
-             ctx.reply("RESULTADO " + row.nombre);
+            ctx.reply("RESULTADO " + row.nombre);
         });
-
-
-//        else {
-//            for (var i of fields) {
-////                console.log("dsdas" + i.id_alias);
-////                console.log("ttt" + i[0].id_alias);
-////                ret.push("Fields" + i);
-//                console.log(i);
-//            }
-//            
-//            console.log("*****");
-//            for (var a of result) {
-////                console.log("dsdas" + i.id_alias);
-////                console.log("ttt" + i[0].id_alias);
-////                ret.push("Fields" + i);
-//                console.log(a);
-//            }
-//        }
-
-//        console.log("resultado", result);
-//        ctx.reply("yeeefdfd" + result.id);
     });
 });
-bot.use((ctx, next) => {
+
+
+// Crear Partida
+
+bot.crear((ctx) => {
+    // tens aquestes partides per jugar segur que vols crearne una ? ?????      
+    //Data, lloc, nivell.
+    
+    
+    
     
 
-    
+});
+
+
+
+
+//Jugar
+
+
+
+
+
+
+
+
+bot.use((ctx, next) => {
     const start = new Date();
     return next(ctx).then(() => {
         const ms = new Date() - start;
