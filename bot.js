@@ -15,9 +15,7 @@ const helpMsg = `Ajuda:
 /setuser - Modificar informació del usuari
 /partides - Numero de partides creades que hi han
 /crear - Crear una nova partida
-
-
-Tip: You can also use e.g. '/inc2 5' to increase counter two by five counts.`;
+/parar - Finalitzar el bot`;
 
 const inputErrMsg = `💥 BOOM... 🔩☠🔧🔨⚡️
 Hm, that wasn't supposed to happen. You didn't input invalid characters, did you?
@@ -29,7 +27,7 @@ const incNMsg = `To use multiple counters, simply put the number of the counter 
 /inc  <- this will increment the default counter (0)
 This does also work with other commands like /dec1 /reset1 /set1 /get1`;
 
-const aboutMsg = "This bot was created by @LeoDJ\nSource code and contact information can be found at https://github.com/LeoDJ/telegram-counter-bot";
+const aboutMsg = "Este bot ha sigut creat per @onademar. Espere que siga de la vostra utilitat.";
 
 function getRegExp(command) {
     return new RegExp("/" + command + "[0-9]*\\b");
@@ -81,20 +79,26 @@ bot.command('start', ctx => {
     logMsg(ctx);
     dataService.registerUser(ctx);
     dataService.setCounter(ctx.chat.id, '0', 0);
-    var m = "Hello, I'm your personal counter bot, simply use the commands to control the counter";
+    
+    //Si el usuari no ha iniciat mai el bot:
+    
+    
+    //Si l'usuari ja ha iniciat el bot alguna vegada:
+    
+    var m = "Hola "+ ctx.chat.first_name+"! Que dessitges fer?\n\/crear (Crear una nova partida)\n\/partides (Veure les partides disponibles)\n\/ajuda\n\/parar";
     ctx.reply(m);
     logOutMsg(ctx, m);
     setTimeout(() => {
-        ctx.reply(0);
+//        ctx.reply(0);
         logOutMsg(ctx, 0)
     }, 50); //workaround to send this message definitely as second message
 });
 
-bot.command('stop', ctx => {
+bot.command('parar', ctx => { // Finalitzar el bot
     logMsg(ctx);
-    var m = "I'm sorry, Dave, I'm afraid I can't do that.";
-    logOutMsg(ctx, m);
-    ctx.reply(m);
+    var missatgeParar = "Fins prompte, " + ctx.chat.first_name+".";
+    logOutMsg(ctx, missatgeParar);
+    ctx.reply(missatgeParar);
 });
 
 bot.command(['incx', 'decx', 'getx', 'setx', 'resetx'], ctx => {
@@ -103,7 +107,7 @@ bot.command(['incx', 'decx', 'getx', 'setx', 'resetx'], ctx => {
     ctx.reply(incNMsg);
 });
 
-bot.command('help', ctx => {
+bot.command('ajuda', ctx => {
     logMsg(ctx);
     logOutMsg(ctx, helpMsg);
     ctx.reply(helpMsg);
@@ -115,16 +119,16 @@ bot.command('about', ctx => {
     ctx.reply(aboutMsg);
 });
 
-bot.command('getall', ctx => {
-    logMsg(ctx);
-    counters = dataService.getAllCounters(ctx.chat.id);
-    msg = "";
-    Object.keys(counters).forEach(counterId => {
-        msg += '[' + counterId + '] ' + counters[counterId].value + "\n";
-    });
-    logOutMsg(ctx, msg);
-    ctx.reply(msg);
-});
+//bot.command('getall', ctx => {
+//    logMsg(ctx);
+//    counters = dataService.getAllCounters(ctx.chat.id);
+//    msg = "";
+//    Object.keys(counters).forEach(counterId => {
+//        msg += '[' + counterId + '] ' + counters[counterId].value + "\n";
+//    });
+//    logOutMsg(ctx, msg);
+//    ctx.reply(msg);
+//});
 
 bot.hears(getRegExp('inc'), ctx => {
     logMsg(ctx);
