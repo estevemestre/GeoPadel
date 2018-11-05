@@ -87,6 +87,8 @@ bot.command('start', ctx => {
     
     var m = "Hola "+ ctx.chat.first_name+"! Que dessitges fer?\n\/crear (Crear una nova partida)\n\/partides (Veure les partides disponibles)\n\/ajuda\n\/parar";
     ctx.reply(m);
+    
+    
     logOutMsg(ctx, m);
     setTimeout(() => {
 //        ctx.reply(0);
