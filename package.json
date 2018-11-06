@@ -14,9 +14,10 @@
     "bot",
     "telegraf",
     "padel",
-    "partidas padel"    
+    "partidas padel"
   ],
   "dependencies": {
-    "telegraf": "^3.6.4"
+    "telegraf": "^3.6.4",
+    "mysql": "2.16.0"
   }
 }

@@ -6,6 +6,10 @@ const {
 
 const config = require('./config');
 const dataService = require('./dataService');
+// Service de l'usuari
+const usuariService = require('./services/usuariService');
+
+
 
 const bot = new Telegraf(config.botToken);
 
@@ -60,10 +64,10 @@ function logOutMsg(ctx, text) {
 }
 
 bot.command('broadcast', ctx => {
-    if(ctx.from.id == config.adminChatId) {
+    if (ctx.from.id == config.adminChatId) {
         var words = ctx.message.text.split(' ');
         words.shift(); //remove first word (which ist "/broadcast")
-        if(words.length == 0) //don't send empty message
+        if (words.length == 0) //don't send empty message
             return;
         var broadcastMessage = words.join(' ');
         var userList = dataService.getUserList();
@@ -75,30 +79,42 @@ bot.command('broadcast', ctx => {
     }
 });
 
+//bot.command('start', ctx => {
+//    logMsg(ctx);
+//    dataService.registerUser(ctx);
+//    dataService.setCounter(ctx.chat.id, '0', 0);
+//    
+//    //Si el usuari no ha iniciat mai el bot:
+//    
+//    
+//    //Si l'usuari ja ha iniciat el bot alguna vegada:
+//    
+//    var m = "Hola "+ ctx.chat.first_name+"! Que dessitges fer?\n\/crear (Crear una nova partida)\n\/partides (Veure les partides disponibles)\n\/ajuda\n\/parar";
+//    ctx.reply(m);
+//    
+//    
+//    logOutMsg(ctx, m);
+//    setTimeout(() => {
+////        ctx.reply(0);
+//        logOutMsg(ctx, 0)
+//    }, 50); //workaround to send this message definitely as second message
+//});
+
+
+
 bot.command('start', ctx => {
-    logMsg(ctx);
-    dataService.registerUser(ctx);
-    dataService.setCounter(ctx.chat.id, '0', 0);
-    
-    //Si el usuari no ha iniciat mai el bot:
+// 1º Comprove que l'usuari existeix en la base de dades
+    let user = usuariService.getUser(ctx.from.id);
     
     
-    //Si l'usuari ja ha iniciat el bot alguna vegada:
-    
-    var m = "Hola "+ ctx.chat.first_name+"! Que dessitges fer?\n\/crear (Crear una nova partida)\n\/partides (Veure les partides disponibles)\n\/ajuda\n\/parar";
-    ctx.reply(m);
-    
-    
-    logOutMsg(ctx, m);
-    setTimeout(() => {
-//        ctx.reply(0);
-        logOutMsg(ctx, 0)
-    }, 50); //workaround to send this message definitely as second message
+    console.log("Aquest es l''usuari que acaba d'introduir /Start" + usuariService.getUser(ctx.from.id));
 });
+
+
 
 bot.command('parar', ctx => { // Finalitzar el bot
     logMsg(ctx);
-    var missatgeParar = "Fins prompte, " + ctx.chat.first_name+".";
+    var missatgeParar = "Fins prompte, " + ctx.chat.first_name + ".";
     logOutMsg(ctx, missatgeParar);
     ctx.reply(missatgeParar);
 });
@@ -230,5 +246,4 @@ bot.startPolling();
 
 
 module.exports = {
-
-}
+};

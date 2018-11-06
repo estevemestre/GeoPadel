@@ -18,7 +18,7 @@ function saveUsers() {
 		fs.writeFile(usrFileName, json, 'utf8', function (err) {
 			if (err) throw err;
 			fileLocked = false;
-		})
+		});
 	}
 }
 

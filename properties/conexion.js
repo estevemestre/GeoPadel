@@ -6,8 +6,9 @@ let db = require('./properties');
 
 var urlBd= db.geopadel.db;
 
+
 //Configuracion mysql
-let connection = mysql.createConnection({
+let con = mysql.createConnection({
     host: urlBd.host,
     user: urlBd.user,
     password: urlBd.password,
@@ -17,7 +18,7 @@ let connection = mysql.createConnection({
 
 //Metodo conectar bd
 
-connection.connect(function(err) {
+con.connect(function(err) {
   if (err) {
     return console.error('error: ' + err.message);
   }
