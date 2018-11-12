@@ -9,9 +9,12 @@ var fileLocked = false;
 
 ////incluyendo mysql	
 let db = require('../properties/properties');
+
+
 var urlBd = db.geopadel.db;
 let mysql = require('mysql');
 
+const bot = require('../bot');
 
 
 let con = mysql.createConnection({
@@ -31,24 +34,32 @@ con.connect(function (err) {
 //---------------------------------------------------------------------------------------------------------
 
 
+function testa(){
+    
+    return "asda";
+}
+
 
 
 // Retorna el usuari; 
-function getUser(users_id) {
-    console.log("Vaig a consultar si existeix " + users_id);
+function getUserByID(users_id) {
+
+console.log("adasdsa");
 
 // guardare les dades areplegades 
-
+    var user = [];
+  
 
     con.query("SELECT * FROM users WHERE users_id =" + users_id, function (err, result, fields) {
         if (err)
             throw err;
 
-        console.log("RESULTAT" + result + " fields " + fields);
 
-        Object.keys(result).forEach(function (key) {
+ /// nomdelmetode.responseData() {sdSADDSAASD} 
+
+        Object.keys(result).forEach(function (key)  {
             var row = result[key];
-            var user = [
+             user = [
                 {
                     "users_id": users_id,
                     "users_first_name": row.users_first_name,
@@ -57,14 +68,29 @@ function getUser(users_id) {
                     "users_levels_id": row.users_levels_id
                 }
             ];
-                return user;
+            console.log("user");
+            
+            bot.casa();
+            
+            // Cridara a un metodo per a que responguera 
+            
+            
+            
+            return user;
         });
-       return null;
+        
+
+        
+        
+         
+         
+        
+        
     });
-
-
-
-
+    
+//  setTimeout(function () {
+     return " b";
+//    }, 3000);<
 
 }
 
@@ -165,13 +191,14 @@ function getAllCounters(uid) {
 }
 
 module.exports = {
-    loadUsers,
-    registerUser,
-    getUserList,
-    setMetaData,
-    getUser,
-    getMetaData,
-    setCounter,
-    getCounter,
-    getAllCounters
+//    loadUsers,
+//    registerUser,
+//    getUserList,
+//    setMetaData,
+    getUserByID,
+//    getMetaData,
+//    setCounter,
+//    getCounter,
+//    getAllCounters,
+    testa
 };

@@ -31,7 +31,12 @@ const incNMsg = `To use multiple counters, simply put the number of the counter 
 /inc  <- this will increment the default counter (0)
 This does also work with other commands like /dec1 /reset1 /set1 /get1`;
 
+
+const esteve = `MANOLO`;
+
 const aboutMsg = "Este bot ha sigut creat per @onademar. Espere que siga de la vostra utilitat.";
+
+var user = ["asd"];
 
 function getRegExp(command) {
     return new RegExp("/" + command + "[0-9]*\\b");
@@ -101,15 +106,59 @@ bot.command('broadcast', ctx => {
 //});
 
 
+//bot.command('getall', ctx => {
+//    logMsg(ctx);
+//    counters = dataService.getAllCounters(ctx.chat.id);
+//    msg = "";
+//    Object.keys(counters).forEach(counterId => {
+//        msg += '[' + counterId + '] ' + counters[counterId].value + "\n";
+//    });
+//    logOutMsg(ctx, msg);
+//    ctx.reply(msg);
+//});
+
+
 
 bot.command('start', ctx => {
 // 1º Comprove que l'usuari existeix en la base de dades
-    let user = usuariService.getUser(ctx.from.id);
-    
-    
-    console.log("Aquest es l''usuari que acaba d'introduir /Start" + usuariService.getUser(ctx.from.id));
+//    let user = usuariService.getUser(ctx.from.id);
+
+
+    var b = "Adas";
+    var a = usuariService.getUserByID(ctx.from.id);
+//     esteve  = usuariService.getUserByID(ctx.from.id); 
+//        
+//        console.log("adEEE" + "AU");
+
+//    aa = usuariService.getUser(ctx.from.id);
+//
+//
+//
+
+    setTimeout(function () {
+        console.log("NORMAL", b);
+        console.log("NORMAL" + b);
+        console.log("ADMINISTRADORsa", a);
+        console.log("ADMINISTRADORsa", a);
+    }, 3000);
+
+
+//    usuariService.getUser(ctx.from.id).then(function (env) {
+//        console.log("333333333333333");
+//    });
+
+
+
+//    console.log("Aquest es l''usuari que acaba d'introduir /Start" + usuariService.getUser(ctx.from.id));
 });
 
+
+
+function casa() {
+    
+    console.log("CASA");
+    
+}
 
 
 bot.command('parar', ctx => { // Finalitzar el bot
@@ -246,4 +295,5 @@ bot.startPolling();
 
 
 module.exports = {
+    casa
 };
