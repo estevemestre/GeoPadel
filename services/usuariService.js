@@ -34,8 +34,8 @@ con.connect(function (err) {
 //---------------------------------------------------------------------------------------------------------
 
 
-function testa(){
-    
+function testa() {
+
     return "asda";
 }
 
@@ -44,53 +44,32 @@ function testa(){
 // Retorna el usuari; 
 function getUserByID(users_id) {
 
-console.log("adasdsa");
-
-// guardare les dades areplegades 
-    var user = [];
-  
-
-    con.query("SELECT * FROM users WHERE users_id =" + users_id, function (err, result, fields) {
-        if (err)
-            throw err;
 
 
- /// nomdelmetode.responseData() {sdSADDSAASD} 
-
-        Object.keys(result).forEach(function (key)  {
-            var row = result[key];
-             user = [
-                {
-                    "users_id": users_id,
-                    "users_first_name": row.users_first_name,
-                    "users_last_name": row.users_last_name,
-                    "users_username": row.users_username,
-                    "users_levels_id": row.users_levels_id
-                }
-            ];
-            console.log("user");
-            
-            bot.casa();
-            
-            // Cridara a un metodo per a que responguera 
-            
-            
-            
-            return user;
+    return new Promise(resolve => {
+        con.query("SELECT * FROM users WHERE users_id =" + users_id, function (err, result, fields) {
+            if (err)
+                throw err;
+            /// nomdelmetode.responseData() {sdSADDSAASD} 
+            Object.keys(result).forEach(function (key) {
+                var row = result[key];
+                user = [
+                    {
+                        "users_id": users_id,
+                        "users_first_name": row.users_first_name,
+                        "users_last_name": row.users_last_name,
+                        "users_username": row.users_username,
+                        "users_levels_id": row.users_levels_id
+                    }
+                ];
+                   resolve(user);
+                // Cridara a un metodo per a que responguera 
+//                return user;
+            });
         });
-        
-
-        
-        
-         
-         
-        
-        
     });
-    
-//  setTimeout(function () {
-     return " b";
-//    }, 3000);<
+
+
 
 }
 
@@ -116,6 +95,15 @@ function saveUsers() {
         });
     }
 }
+
+function resolveAfter2Seconds(x) {
+    return new Promise(resolve => {
+        setTimeout(() => {
+            resolve(x);
+        }, 2000);
+    });
+}
+
 
 function registerUser(msg) {
     var uid = msg.chat.id;
@@ -196,6 +184,7 @@ module.exports = {
 //    getUserList,
 //    setMetaData,
     getUserByID,
+    resolveAfter2Seconds,
 //    getMetaData,
 //    setCounter,
 //    getCounter,

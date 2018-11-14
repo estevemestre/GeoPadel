@@ -122,10 +122,14 @@ bot.command('broadcast', ctx => {
 bot.command('start', ctx => {
 // 1º Comprove que l'usuari existeix en la base de dades
 //    let user = usuariService.getUser(ctx.from.id);
+    var x = usuariService.resolveAfter2Seconds(50);
 
 
     var b = "Adas";
     var a = usuariService.getUserByID(ctx.from.id);
+
+    console.log("USUARI", a);
+
 //     esteve  = usuariService.getUserByID(ctx.from.id); 
 //        
 //        console.log("adEEE" + "AU");
@@ -134,16 +138,14 @@ bot.command('start', ctx => {
 //
 //
 //
-
+//
     setTimeout(function () {
-        console.log("NORMAL", b);
-        console.log("NORMAL" + b);
-        console.log("ADMINISTRADORsa", a);
-        console.log("ADMINISTRADORsa", a);
+        console.log("USUARI", a);
+      console.log("aaaaUSUARI", a);
     }, 3000);
 
 
-//    usuariService.getUser(ctx.from.id).then(function (env) {
+//    usuariService.getUser(ctx.from.id).then(function (env) {cacasa
 //        console.log("333333333333333");
 //    });
 
@@ -153,12 +155,6 @@ bot.command('start', ctx => {
 });
 
 
-
-function casa() {
-    
-    console.log("CASA");
-    
-}
 
 
 bot.command('parar', ctx => { // Finalitzar el bot
@@ -295,5 +291,5 @@ bot.startPolling();
 
 
 module.exports = {
-    casa
+
 };
