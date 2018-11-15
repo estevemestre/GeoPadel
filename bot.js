@@ -119,16 +119,43 @@ bot.command('broadcast', ctx => {
 
 
 
+
+
+bot.command(['princpiant', 'intermig', 'avancat'], ctx => {
+    console.log("yee");
+    ctx.reply("yeeeee");
+    
+    
+    // buscar l'usuari despres guardar l'usuari en la base de dades 
+});
+
+
+
 bot.command('start', ctx => {
-// 1º Comprove que l'usuari existeix en la base de dades
-//    let user = usuariService.getUser(ctx.from.id);
-    var x = usuariService.resolveAfter2Seconds(50);
+    usuariService.getUserByID(ctx.from.id).then(data => {
+//        console.log("DAta" + data);
+        if (data === null) {
+            console.log("No he trobat");
+            ctx.reply("Quin nivell eres? /avancat /intermig /principiant ");
 
 
-    var b = "Adas";
-    var a = usuariService.getUserByID(ctx.from.id);
 
-    console.log("USUARI", a);
+        } else {
+            var nom = data[0].users_first_name;
+            console.log("SI que he trobat ", nom);
+
+            ctx.reply("Benvingutss: " + nom + "\crearPartida " + " VOls modificar el teu nivell " );
+        }
+//        ctx.reply("Benvingut", nom);
+    });
+
+
+
+//    console.log("USUARI", a);
+//
+//    console.log("CONSOLE:LOG", a);
+//    ctx.reply("TELEGRAM", a);
+
 
 //     esteve  = usuariService.getUserByID(ctx.from.id); 
 //        
@@ -138,10 +165,15 @@ bot.command('start', ctx => {
 //
 //
 //
-//
+////
     setTimeout(function () {
-        console.log("USUARI", a);
-      console.log("aaaaUSUARI", a);
+
+//        console.log(a);
+//        console.log("aaaaa", a.PromiseValue[0].users_first_name);
+//        console.log("telegram", a[0].users_first_name);
+//        ctx.reply("telegram", a);
+//        ctx.reply("telegram", a[0].users_first_name);
+
     }, 3000);
 
 
@@ -153,6 +185,19 @@ bot.command('start', ctx => {
 
 //    console.log("Aquest es l''usuari que acaba d'introduir /Start" + usuariService.getUser(ctx.from.id));
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

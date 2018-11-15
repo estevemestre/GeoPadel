@@ -44,7 +44,7 @@ function testa() {
 // Retorna el usuari; 
 function getUserByID(users_id) {
 
-
+    var user = null;
 
     return new Promise(resolve => {
         con.query("SELECT * FROM users WHERE users_id =" + users_id, function (err, result, fields) {
@@ -62,10 +62,25 @@ function getUserByID(users_id) {
                         "users_levels_id": row.users_levels_id
                     }
                 ];
-                   resolve(user);
+
                 // Cridara a un metodo per a que responguera 
 //                return user;
             });
+            if (user === null) {
+                console.log("No estic");
+                resolve(user);
+
+
+            } else {
+                console.log("Si que  estic ");
+                resolve(user);
+            }
+
+
+
+
+
+
         });
     });
 
