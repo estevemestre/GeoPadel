@@ -122,10 +122,10 @@ bot.command('broadcast', ctx => {
 
 
 bot.command(['principiant', 'intermig', 'avancat'], ctx => {
-    console.log("yee");
-    ctx.reply("yeeeee");
+//    console.log("yee" + ctx.message.text);
+    ctx.reply("yeeeee" );
     
-    usuariService.setLevelByID(ctx.from.id);
+    usuariService.setLevelByID(ctx.from.id, ctx.message.text);
     
      
     
@@ -138,7 +138,7 @@ bot.command(['principiant', 'intermig', 'avancat'], ctx => {
 bot.command('start', ctx => {
     
     
-    
+//    console.log("CTX", ctx.message.text);
     
     
     usuariService.getUserByID(ctx.from.id).then(data => {
@@ -152,8 +152,8 @@ bot.command('start', ctx => {
             
             usuariService.saveUser(ctx.message);
             
-            ctx.reply("Quin nivell eres? /avancat /intermig /principiant ");
-            console.log("JWJWJWJWJJWJWJW");
+            ctx.reply("Quin nivell tens? ( /avancat /intermig /principiant ) ");
+           
 
 
         } else {

@@ -99,14 +99,25 @@ function saveUser(usuari) {
     });
 }
 
-function setLevelByID(users_id) {
-    console.log("entrem en guardar MODIFICAR NIVELL");
-
-//    var sql = "UPDATE customers SET users_levels_id =1  WHERE  users_id = '136218125''";   
-//    con.query(sql, function (err, result) {
-//        if (err)
-//            throw err;
-//    });
+function setLevelByID(users_id, missatge) {
+    var nivell;
+    
+    switch(missatge){
+        case "/principiant":
+            nivell = 3;
+        break;
+        case "/intermig":
+            nivell = 2;
+        break;
+        case "/avancat":
+            nivell = 1;
+        break;
+    }
+    var sql = "UPDATE users SET users_levels_id='"+nivell+"' WHERE users_id = '"+users_id+"'";   
+    con.query(sql, function (err, result) {
+        if (err)
+            throw err;
+    });
 }
 
 
@@ -223,6 +234,7 @@ module.exports = {
     getUserByID,
     saveUser,
     resolveAfter2Seconds,
+    setLevelByID,
 //    getMetaData,
 //    setCounter,
 //    getCounter,
