@@ -121,23 +121,39 @@ bot.command('broadcast', ctx => {
 
 
 
-bot.command(['princpiant', 'intermig', 'avancat'], ctx => {
+bot.command(['principiant', 'intermig', 'avancat'], ctx => {
     console.log("yee");
     ctx.reply("yeeeee");
     
+    usuariService.setLevelByID(ctx.from.id);
     
+     
+    
+    // Sempre que entra aci actualitzar del  i damunt de tot aso ho tindras ja implementat per si un usuari vol modificar un nivell .
     // buscar l'usuari despres guardar l'usuari en la base de dades 
 });
 
 
 
 bot.command('start', ctx => {
+    
+    
+    
+    
+    
     usuariService.getUserByID(ctx.from.id).then(data => {
 //        console.log("DAta" + data);
-        if (data === null) {
+        if (data === null) { // Vol dir que no hi ha cap usuari
+            // Jo no 
+        
             console.log("No he trobat");
+            
+            //Insert 
+            
+            usuariService.saveUser(ctx.message);
+            
             ctx.reply("Quin nivell eres? /avancat /intermig /principiant ");
-
+            console.log("JWJWJWJWJJWJWJW");
 
 
         } else {
