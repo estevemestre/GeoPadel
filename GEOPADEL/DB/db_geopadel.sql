@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 19-11-2018 a las 18:55:52
+-- Tiempo de generación: 19-11-2018 a las 19:30:00
 -- Versión del servidor: 10.1.26-MariaDB
 -- Versión de PHP: 7.1.8
 
@@ -21,6 +21,26 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `db_geopadel`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `horari_pistes`
+--
+
+CREATE TABLE `horari_pistes` (
+  `horari_pistes_id` int(5) NOT NULL,
+  `horari_pistes_dies` int(7) NOT NULL,
+  `horari_pistes_hores` int(5) NOT NULL,
+  `horari_pistes_pistes_id` int(5) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `horari_pistes`
+--
+
+INSERT INTO `horari_pistes` (`horari_pistes_id`, `horari_pistes_dies`, `horari_pistes_hores`, `horari_pistes_pistes_id`) VALUES
+(0, 1111111, 11, 0);
 
 -- --------------------------------------------------------
 
