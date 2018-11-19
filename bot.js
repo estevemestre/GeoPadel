@@ -139,6 +139,11 @@ bot.command(['nivell'], ctx => {
 });
 
 
+//bot.use((ctx, next) => {
+//     //Metodo que cada vegada que l'usuari escriu algo entra
+//      ctx.reply("Usuari diu algo");
+//});
+
 bot.command('start', ctx => {
 
 
