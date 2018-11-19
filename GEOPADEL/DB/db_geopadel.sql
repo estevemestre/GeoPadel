@@ -28,11 +28,14 @@ SET time_zone = "+00:00";
 -- Estructura de tabla para la tabla `horari_pistes`
 --
 
+
+
 CREATE TABLE `horari_pistes` (
-  `horari_pistes_id` int(5) NOT NULL,
+  `horari_pistes_id` int(5) NOT NULL AUTO_INCREMENT,
   `horari_pistes_dies` int(7) NOT NULL,
   `horari_pistes_hores` int(5) NOT NULL,
-  `horari_pistes_pistes_id` int(5) NOT NULL
+  `horari_pistes_pistes_id` int(5) NOT NULL,
+   PRIMARY KEY (`horari_pistes_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -70,12 +73,13 @@ INSERT INTO `levels` (`levels_id`, `levels_desc`) VALUES
 --
 
 CREATE TABLE `partides` (
-  `partides_id` int(5) NOT NULL,
+  `partides_id` int(5) NOT NULL AUTO_INCREMENT,
   `partides_desc` varchar(50) NOT NULL,
   `partides_num_jugadors` int(5) NOT NULL,
   `pistes_id` int(5) NOT NULL,
   `partides_levels_id` int(5) NOT NULL,
-  `partides_data` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP
+  `partides_data` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`partides_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -92,9 +96,10 @@ INSERT INTO `partides` (`partides_id`, `partides_desc`, `partides_num_jugadors`,
 --
 
 CREATE TABLE `partides_users` (
-  `partides_users_id` int(5) NOT NULL,
+  `partides_users_id` int(5) NOT NULL AUTO_INCREMENT,
   `partides_users_users_id` int(5) NOT NULL,
-  `partides_users_partides_id` int(5) NOT NULL
+  `partides_users_partides_id` int(5) NOT NULL,
+  PRIMARY KEY (`partides_users_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -104,10 +109,11 @@ CREATE TABLE `partides_users` (
 --
 
 CREATE TABLE `pistes` (
-  `pistes_id` int(5) NOT NULL,
+  `pistes_id` int(5) NOT NULL AUTO_INCREMENT,
   `pistes_desc` varchar(50) NOT NULL,
   `pistes_user_alias` varchar(50) NOT NULL,
-  `pistes_situacio` varchar(50) NOT NULL
+  `pistes_situacio` varchar(50) NOT NULL,
+  PRIMARY KEY (`pistes_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -141,24 +147,17 @@ INSERT INTO `users` (`users_id`, `users_first_name`, `users_last_name`, `users_u
 ALTER TABLE `levels`
   ADD PRIMARY KEY (`levels_id`);
 
---
--- Indices de la tabla `partides`
---
-ALTER TABLE `partides`
-  ADD PRIMARY KEY (`partides_id`);
 
 --
 -- Indices de la tabla `partides_users`
 --
 ALTER TABLE `partides_users`
-  ADD KEY `fk_partides_users_users` (`partides_users_users_id`),
   ADD KEY `fk_partides_users_partides` (`partides_users_partides_id`);
 
 --
 -- Indices de la tabla `pistes`
 --
-ALTER TABLE `pistes`
-  ADD KEY `fk_pistes` (`pistes_id`);
+
 
 --
 -- Indices de la tabla `users`
