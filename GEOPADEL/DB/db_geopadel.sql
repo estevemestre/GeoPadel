@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 06-11-2018 a las 19:34:25
+-- Tiempo de generación: 19-11-2018 a las 18:55:52
 -- Versión del servidor: 10.1.26-MariaDB
 -- Versión de PHP: 7.1.8
 
@@ -38,9 +38,57 @@ CREATE TABLE `levels` (
 --
 
 INSERT INTO `levels` (`levels_id`, `levels_desc`) VALUES
+(0, 'Null'),
 (1, 'Avançat'),
 (2, 'Normal'),
 (3, 'Principiant');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `partides`
+--
+
+CREATE TABLE `partides` (
+  `partides_id` int(5) NOT NULL,
+  `partides_desc` varchar(50) NOT NULL,
+  `partides_num_jugadors` int(5) NOT NULL,
+  `pistes_id` int(5) NOT NULL,
+  `partides_levels_id` int(5) NOT NULL,
+  `partides_data` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `partides`
+--
+
+INSERT INTO `partides` (`partides_id`, `partides_desc`, `partides_num_jugadors`, `pistes_id`, `partides_levels_id`, `partides_data`) VALUES
+(0, 'PartidaenALmoines', 4, 0, 0, '0000-00-00 00:00:00');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `partides_users`
+--
+
+CREATE TABLE `partides_users` (
+  `partides_users_id` int(5) NOT NULL,
+  `partides_users_users_id` int(5) NOT NULL,
+  `partides_users_partides_id` int(5) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pistes`
+--
+
+CREATE TABLE `pistes` (
+  `pistes_id` int(5) NOT NULL,
+  `pistes_desc` varchar(50) NOT NULL,
+  `pistes_user_alias` varchar(50) NOT NULL,
+  `pistes_situacio` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -61,8 +109,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`users_id`, `users_first_name`, `users_last_name`, `users_username`, `users_levels_id`) VALUES
-(1, 'luciaserer', '1', 'alicante', 0),
-(136218125, 'esteve', '6', '4', 0);
+(136218125, 'Esteve', 'Mestre', 'emestre', 1);
 
 --
 -- Índices para tablas volcadas
@@ -75,10 +122,53 @@ ALTER TABLE `levels`
   ADD PRIMARY KEY (`levels_id`);
 
 --
+-- Indices de la tabla `partides`
+--
+ALTER TABLE `partides`
+  ADD PRIMARY KEY (`partides_id`);
+
+--
+-- Indices de la tabla `partides_users`
+--
+ALTER TABLE `partides_users`
+  ADD KEY `fk_partides_users_users` (`partides_users_users_id`),
+  ADD KEY `fk_partides_users_partides` (`partides_users_partides_id`);
+
+--
+-- Indices de la tabla `pistes`
+--
+ALTER TABLE `pistes`
+  ADD KEY `fk_pistes` (`pistes_id`);
+
+--
 -- Indices de la tabla `users`
 --
 ALTER TABLE `users`
-  ADD PRIMARY KEY (`users_id`);
+  ADD PRIMARY KEY (`users_id`),
+  ADD KEY `fk_users_levels_id` (`users_levels_id`);
+
+--
+-- Restricciones para tablas volcadas
+--
+
+--
+-- Filtros para la tabla `partides_users`
+--
+ALTER TABLE `partides_users`
+  ADD CONSTRAINT `fk_partides_users_partides` FOREIGN KEY (`partides_users_partides_id`) REFERENCES `partides` (`partides_id`),
+  ADD CONSTRAINT `fk_partides_users_users` FOREIGN KEY (`partides_users_users_id`) REFERENCES `users` (`users_id`);
+
+--
+-- Filtros para la tabla `pistes`
+--
+ALTER TABLE `pistes`
+  ADD CONSTRAINT `fk_pistes` FOREIGN KEY (`pistes_id`) REFERENCES `partides` (`partides_id`);
+
+--
+-- Filtros para la tabla `users`
+--
+ALTER TABLE `users`
+  ADD CONSTRAINT `fk_users_levels_id` FOREIGN KEY (`users_levels_id`) REFERENCES `levels` (`levels_id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
