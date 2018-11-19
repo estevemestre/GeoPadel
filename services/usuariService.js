@@ -120,7 +120,15 @@ function setLevelByID(users_id, missatge) {
     });
 }
 
-
+function crearPartida(ctx) {
+    console.log("En crear partida");
+//    ctx.reply("Descripció de ");
+//    var sql;
+//    con.query(sql, function (err, result) {
+//        if (err)
+//            throw err;
+//    });
+}
 
 
 
@@ -235,6 +243,7 @@ module.exports = {
     saveUser,
     resolveAfter2Seconds,
     setLevelByID,
+    crearPartida,
 //    getMetaData,
 //    setCounter,
 //    getCounter,

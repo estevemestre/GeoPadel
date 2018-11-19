@@ -8,8 +8,8 @@ const config = require('./config');
 const dataService = require('./dataService');
 // Service de l'usuari
 const usuariService = require('./services/usuariService');
-
-
+//Service Partides
+const pistaService = require('./services/pistaService');
 
 const bot = new Telegraf(config.botToken);
 
@@ -32,7 +32,6 @@ const incNMsg = `To use multiple counters, simply put the number of the counter 
 This does also work with other commands like /dec1 /reset1 /set1 /get1`;
 
 
-const esteve = `MANOLO`;
 
 const aboutMsg = "Este bot ha sigut creat per @onademar. Espere que siga de la vostra utilitat.";
 
@@ -139,16 +138,14 @@ bot.command(['nivell'], ctx => {
 });
 
 
+
+
 //bot.use((ctx, next) => {
 //     //Metodo que cada vegada que l'usuari escriu algo entra
 //      ctx.reply("Usuari diu algo");
 //});
 
 bot.command('start', ctx => {
-
-
-//    console.log("CTX", ctx.message.text);
-
 
     usuariService.getUserByID(ctx.from.id).then(data => {
 //        console.log("DAta" + data);
@@ -211,10 +208,34 @@ bot.command('start', ctx => {
 //    console.log("Aquest es l''usuari que acaba d'introduir /Start" + usuariService.getUser(ctx.from.id));
 });
 
+//bot.on('text', (ctx) => {
+//  // Explicit usage
+//  console.log("TEEEEXT");
+//  ctx.telegram.sendMessage(ctx.message.chat.id, `Hello ${ctx.state.role}`)
+//
+//  // Using shortcut
+//  ctx.reply(`Hello ${ctx.state.role}`)
+//})
 
 
 
 
+bot.command('crearPartida', ctx => { //Crear una nova partida
+    console.log("Vaig a crear una partida");
+    usuariService.crearPartida(ctx);
+});
+
+bot.command('crearPista', ctx => { //Crear una nova partida
+    console.log("Vaig a crear una pista");
+    ctx.reply(" Inserte la descripcion de la pista: (/descripcionPista pista negra Piles)");
+    console.log(ctx.message.text);
+});
+
+bot.command(['descripcionPista'], ctx => {
+//   console.log(ctx.message.text);
+   pistaService.savePartida(ctx);
+   // yo inserte en la BD
+});
 
 
 
