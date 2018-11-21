@@ -35,7 +35,6 @@ con.connect(function (err) {
 
 
 function testa() {
-
     return "asda";
 }
 

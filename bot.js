@@ -8,8 +8,10 @@ const config = require('./config');
 const dataService = require('./dataService');
 // Service de l'usuari
 const usuariService = require('./services/usuariService');
+const partidesService = require('./services/partidesService');
+
 //Service Partides
-const pistaService = require('./services/pistaService');
+//const pistaService = require('./services/pistaService');
 
 const bot = new Telegraf(config.botToken);
 
@@ -124,10 +126,10 @@ bot.command(['principiant', 'intermig', 'avancat'], ctx => {
 //    console.log("yee" + ctx.message.text);
 
     usuariService.setLevelByID(ctx.from.id, ctx.message.text);
-    
+
     ctx.reply("Ja he modificat el teu nivell ara que vols fer /crear o /buscar partida?");
 
-    
+
     // Sempre que entra aci actualitzar del  i damunt de tot aso ho tindras ja implementat per si un usuari vol modificar un nivell .
     // buscar l'usuari despres guardar l'usuari en la base de dades 
 });
@@ -136,6 +138,12 @@ bot.command(['principiant', 'intermig', 'avancat'], ctx => {
 bot.command(['nivell'], ctx => {
     ctx.reply("Quin nivell tens? ( /avancat /intermig /principiant ) ");
 });
+
+
+
+
+// Buscar una partida 
+
 
 
 
@@ -233,11 +241,50 @@ bot.command('crearPista', ctx => { //Crear una nova partida
 
 bot.command(['descripcionPista'], ctx => {
 //   console.log(ctx.message.text);
-   pistaService.savePartida(ctx);
-   // yo inserte en la BD
+//    pistaService.savePartida(ctx);
+    // yo inserte en la BD
 });
 
 
+
+// Buscar  una partida primer que tot introduir la data del dia que vol buscarla 
+
+
+
+
+// Introdueix la data 
+
+bot.command(['buscarPartida'], ctx => {
+// Perfavor indica una data 
+
+
+    console.log(ctx.message.text);
+
+    ctx.reply("Perfavor indica una data amb el format seguent dia/mes exemple /buscarPartida x/x");
+    
+    
+    // Hi ha que desficfrar la data i buscar en partides si hi ha una partida amb la data que fica ell i ademes del seu nivell i que siguen menys de 4 jugadors.
+   // Si l'usuari Introdueix una data incorrecta o no introduix res tornar a preguntarliu  
+    
+    
+
+
+
+
+      console.log("Bucar si en eixa data hi ha una partida del nivell del jugador ");
+      
+      
+      
+
+
+//    bot.command(['/data'], ctx => {
+//        console.log("test" + ctx.message);
+//    });
+
+
+
+    // yo inserte en la BD
+});
 
 
 
