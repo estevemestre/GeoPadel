@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 20-11-2018 a las 18:33:47
+-- Tiempo de generación: 21-11-2018 a las 19:15:28
 -- Versión del servidor: 10.1.26-MariaDB
 -- Versión de PHP: 7.1.8
 
@@ -71,6 +71,13 @@ CREATE TABLE `partides` (
   `partides_data` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Volcado de datos para la tabla `partides`
+--
+
+INSERT INTO `partides` (`partides_id`, `partides_desc`, `partides_num_jugadors`, `partides_pistes_id`, `partides_levels_id`, `partides_data`) VALUES
+(1, 'Partida vistus', 0, 1, 2, '2018-11-15 10:31:00');
+
 -- --------------------------------------------------------
 
 --
@@ -96,6 +103,13 @@ CREATE TABLE `pistes` (
   `pistes_situacio` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Volcado de datos para la tabla `pistes`
+--
+
+INSERT INTO `pistes` (`pistes_id`, `pistes_desc`, `pistes_users_id`, `pistes_situacio`) VALUES
+(1, 'Pista Piles 01', 0, NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -109,6 +123,13 @@ CREATE TABLE `users` (
   `users_username` varchar(50) NOT NULL,
   `users_levels_id` int(5) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `users`
+--
+
+INSERT INTO `users` (`users_id`, `users_first_name`, `users_last_name`, `users_username`, `users_levels_id`) VALUES
+(0, 'Roberto', 'Pilero', 'Pull', 0);
 
 --
 -- Índices para tablas volcadas
@@ -170,7 +191,7 @@ ALTER TABLE `horari_pistes`
 -- AUTO_INCREMENT de la tabla `partides`
 --
 ALTER TABLE `partides`
-  MODIFY `partides_id` int(5) NOT NULL AUTO_INCREMENT;
+  MODIFY `partides_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT de la tabla `partides_users`
 --
@@ -180,7 +201,7 @@ ALTER TABLE `partides_users`
 -- AUTO_INCREMENT de la tabla `pistes`
 --
 ALTER TABLE `pistes`
-  MODIFY `pistes_id` int(5) NOT NULL AUTO_INCREMENT;
+  MODIFY `pistes_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- Restricciones para tablas volcadas
 --

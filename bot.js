@@ -263,7 +263,7 @@ bot.command(['buscarPartida'], ctx => {
     ctx.reply("Perfavor indica una data amb el format seguent dia/mes exemple /buscarPartida x/x");
     
     
-    // Hi ha que desficfrar la data i buscar en partides si hi ha una partida amb la data que fica ell i ademes del seu nivell i que siguen menys de 4 jugadors.
+   // Hi ha que desficfrar la data i buscar en partides si hi ha una partida amb la data que fica ell i ademes del seu nivell i que siguen menys de 4 jugadors.
    // Si l'usuari Introdueix una data incorrecta o no introduix res tornar a preguntarliu  
     
     
