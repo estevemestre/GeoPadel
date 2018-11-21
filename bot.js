@@ -122,99 +122,56 @@ bot.command('broadcast', ctx => {
 
 
 
-bot.command(['principiant', 'intermig', 'avancat'], ctx => {
-//    console.log("yee" + ctx.message.text);
 
-    usuariService.setLevelByID(ctx.from.id, ctx.message.text);
-
-    ctx.reply("Ja he modificat el teu nivell ara que vols fer /crear o /buscar partida?");
-
-
-    // Sempre que entra aci actualitzar del  i damunt de tot aso ho tindras ja implementat per si un usuari vol modificar un nivell .
-    // buscar l'usuari despres guardar l'usuari en la base de dades 
-});
 
 
 bot.command(['nivell'], ctx => {
     ctx.reply("Quin nivell tens? ( /avancat /intermig /principiant ) ");
 });
 
+bot.command(['principiant', 'intermig', 'avancat'], ctx => {
+    usuariService.setLevelByID(ctx.from.id, ctx.message.text);
 
+    ctx.reply("Nivell modificat correctament. Que dessitges fer ara?\n\
+\n\
+/crearPartida (Crear una nova partida)\n\
+/buscarPartida (Buscar una nova partida)\n\
+/nivell (Canviar el teu nivell)\n\
+/ajuda (Llistat d'ajuda)\n\
+/parar (Finalitzar el bot)");
 
+});
 
-// Buscar una partida 
-
-
-
-
-
-//bot.use((ctx, next) => {
-//     //Metodo que cada vegada que l'usuari escriu algo entra
-//      ctx.reply("Usuari diu algo");
-//});
 
 bot.command('start', ctx => {
 
     usuariService.getUserByID(ctx.from.id).then(data => {
-//        console.log("DAta" + data);
         if (data === null) { // Vol dir que no hi ha cap usuari
-            // Jo no 
-
-            console.log("No he trobat");
-
+            console.log("No he trobat a cap usuari, vaig a insertar-lo");
             //Insert 
-
             usuariService.saveUser(ctx.message);
-
-            ctx.reply("Quin nivell tens? ( /avancat /intermig /principiant ) ");
-
-
-
-        } else {
+            ctx.reply("Benvingut a GeoPadel. Quin nivell tens? ( /avancat /intermig /principiant ) ");
+        } else { // Si he trobat al usuari
             var nom = data[0].users_first_name;
-            console.log("SI que he trobat ", nom);
-
-            ctx.reply("Benvingutss: " + nom + " /crearPartida " + " VOls modificar el teu /nivell ");
+            console.log("Si que he trobat al usuari: ", nom);
+            ctx.reply("Benvingut/da de nou, " + nom + ". Qué dessitges fer?\n\
+\n\
+/crearPartida (Crear una nova partida)\n\
+/buscarPartida (Buscar una nova partida)\n\
+/nivell (Canviar el teu nivell)\n\
+/ajuda (Llistat d'ajuda)\n\
+/parar (Finalitzar el bot)");
         }
 //        ctx.reply("Benvingut", nom);
     });
 
 
-
-//    console.log("USUARI", a);
-//
-//    console.log("CONSOLE:LOG", a);
-//    ctx.reply("TELEGRAM", a);
-
-
-//     esteve  = usuariService.getUserByID(ctx.from.id); 
-//        
-//        console.log("adEEE" + "AU");
-
-//    aa = usuariService.getUser(ctx.from.id);
-//
-//
-//
-////
-    setTimeout(function () {
-
-//        console.log(a);
-//        console.log("aaaaa", a.PromiseValue[0].users_first_name);
-//        console.log("telegram", a[0].users_first_name);
-//        ctx.reply("telegram", a);
-//        ctx.reply("telegram", a[0].users_first_name);
-
-    }, 3000);
-
-
-//    usuariService.getUser(ctx.from.id).then(function (env) {cacasa
-//        console.log("333333333333333");
-//    });
-
-
-
-//    console.log("Aquest es l''usuari que acaba d'introduir /Start" + usuariService.getUser(ctx.from.id));
 });
+
+
+
+
+
 
 //bot.on('text', (ctx) => {
 //  // Explicit usage
@@ -252,29 +209,63 @@ bot.command(['descripcionPista'], ctx => {
 
 
 
-// Introdueix la data 
+//// Cada vegada que l'usuari escriu ho guardem en un json
+//bot.on('text',  (data, ctx) => {
+////    console.log("Missatge ultim");
+////     console.log(JSON.stringify(data,4,null));
+//console.log("bot on!");
+//    console.log("===========================================")
+////     console.log(typeof data);
+//    var ultimoMensaje = data.update.message.text;
+//        console.log(ultimoMensaje);
+//
+//    switch (ultimoMensaje) {
+//        case "/buscarPartida":
+//            buscarPartida(data, ctx);
+//        break;
+//
+//    }
+//
+//});
+
+//function buscarPartida(data, ctx){
+//    console.log("Buscar Partida");
+//     console.log(data.update.message.text);
+//}
+
+
 
 bot.command(['buscarPartida'], ctx => {
 // Perfavor indica una data 
-
-
-    console.log(ctx.message.text);
-
-    ctx.reply("Perfavor indica una data amb el format seguent dia/mes exemple /buscarPartida x/x");
-    
-    
-   // Hi ha que desficfrar la data i buscar en partides si hi ha una partida amb la data que fica ell i ademes del seu nivell i que siguen menys de 4 jugadors.
-   // Si l'usuari Introdueix una data incorrecta o no introduix res tornar a preguntarliu  
-    
-    
+ 
 
 
 
 
-      console.log("Bucar si en eixa data hi ha una partida del nivell del jugador ");
-      
-      
-      
+    ctx.reply("Per favor inserta de la seguent manera el dia: /partida dia/mes (/partida 13-10)");
+
+//ctx.reply("Per favor inserta de la seguent manera el dia: /partida dia/mes (/partida 13-10)", Extra.markup(Markup.forceReply()));
+
+//bot.hears();
+//console.log("A leeer:", bot.hears());
+    // Hi ha que desficfrar la data i buscar en partides si hi ha una partida amb la data que fica ell i ademes del seu nivell i que siguen menys de 4 jugadors.
+    // Si l'usuari Introdueix una data incorrecta o no introduix res tornar a preguntarliu  
+
+    bot.command(['partida'], ctx => {
+        console.log("PAAAAAAAAARTIDA" + ctx.message.text);
+
+        var fechaDividida = ctx.message.text.split(" ", 3);
+        var diaymes = fechaDividida[1].split("-",3);
+       
+        ctx.reply("Has elegit el dia: " +diaymes[0]+ " del mes: " + diaymes[1]);
+        console.log("dia: " + diaymes[0] + "mes: " + diaymes[1]);
+    });
+
+
+//    console.log("Bucar si en eixa data hi ha una partida del nivell del jugador ");
+
+
+
 
 
 //    bot.command(['/data'], ctx => {
