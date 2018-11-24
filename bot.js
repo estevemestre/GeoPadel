@@ -237,12 +237,14 @@ bot.command(['descripcionPista'], ctx => {
 
 bot.command(['buscarPartida'], ctx => {
 // Perfavor indica una data 
- 
 
 
 
 
-    ctx.reply("Per favor inserta de la seguent manera el dia: /partida dia/mes (/partida 13-10)");
+
+    ctx.reply("Com dessitges buscar la partida:\n\
+Per un dia: /partida dia-mes (Ex: /partida 13-10)\n\
+Totes les partides: /totesPartides");
 
 //ctx.reply("Per favor inserta de la seguent manera el dia: /partida dia/mes (/partida 13-10)", Extra.markup(Markup.forceReply()));
 
@@ -255,9 +257,9 @@ bot.command(['buscarPartida'], ctx => {
         console.log("PAAAAAAAAARTIDA" + ctx.message.text);
 
         var fechaDividida = ctx.message.text.split(" ", 3);
-        var diaymes = fechaDividida[1].split("-",3);
-       
-        ctx.reply("Has elegit el dia: " +diaymes[0]+ " del mes: " + diaymes[1]);
+        var diaymes = fechaDividida[1].split("-", 3);
+
+        ctx.reply("Has elegit el dia: " + diaymes[0] + " del mes: " + diaymes[1]);
         console.log("dia: " + diaymes[0] + "mes: " + diaymes[1]);
     });
 
@@ -278,6 +280,37 @@ bot.command(['buscarPartida'], ctx => {
 });
 
 
+
+
+
+bot.command(['totesPartides'], ctx => {
+    console.log("1Vull saber totes les manolo" + ctx.message.text);
+
+    console.log("2Vull saber totes les partides" + ctx.message.text);
+
+
+
+    console.log("3Vull saber totes les partides" + ctx.message.text);
+
+    console.log("4Vull saber totes les partides" + ctx.message.text);
+
+
+
+//    ctx.reply("Ara et busque totes les partides");
+//
+//    partidesService.getPartides().then(data => {
+//
+//        console.log("Dentro de Partidaaaaa Serrvice");
+//
+////        if (data === null) { // Vol dir que no hi ha cap usuari
+////           
+////        } else { // Si he trobat al usuari
+////           
+////        }
+////        ctx.reply("Benvingut", nom);
+//    });
+
+});
 
 
 
