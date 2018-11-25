@@ -44,6 +44,11 @@ function getPartides() {
    
    
     return new Promise(resolve => {
+        
+        // QUIN NIVELL TE EL USUARI ???
+        
+        
+        
         con.query("SELECT * FROM partides", function (err, result, fields) {
             if (err)
                 throw err;

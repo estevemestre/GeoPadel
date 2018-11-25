@@ -91,28 +91,56 @@ function saveUser(usuari) {
     console.log("entrem en guardar usuari");
 
     var sql = "INSERT INTO users (users_id, users_first_name, users_last_name, users_username) VALUES ('" + usuari.from.id + "', '" + usuari.from.first_name + "', '" + usuari.from.last_name + "', '" + usuari.from.username + "')";
-   
+
+    con.query(sql, function (err, result) {
+        if (err)
+            throw err;
+    });
+}
+// Aquest metode mes endavant tindra que ferse amb un select 
+
+function getLevelbyId(idNivell) {
+
+    switch (idNivell) {
+        case "0":
+            return "No te cap nivell";
+            break;
+        case "1":
+            return "Avançat";
+            break;
+        case "2":
+            return "Intermig";
+            break;
+        case "3":
+            return "Principant";
+            break;
+    }
+
+    var sql = "UPDATE users SET users_levels_id='" + nivell + "' WHERE users_id = '" + users_id + "'";
     con.query(sql, function (err, result) {
         if (err)
             throw err;
     });
 }
 
+
+
 function setLevelByID(users_id, missatge) {
     var nivell;
-    
-    switch(missatge){
+
+    switch (missatge) {
         case "/principiant":
             nivell = 3;
-        break;
+            break;
         case "/intermig":
             nivell = 2;
-        break;
+            break;
         case "/avancat":
             nivell = 1;
-        break;
+            break;
     }
-    var sql = "UPDATE users SET users_levels_id='"+nivell+"' WHERE users_id = '"+users_id+"'";   
+
+    var sql = "UPDATE users SET users_levels_id='" + nivell + "' WHERE users_id = '" + users_id + "'";
     con.query(sql, function (err, result) {
         if (err)
             throw err;
@@ -243,6 +271,7 @@ module.exports = {
     resolveAfter2Seconds,
     setLevelByID,
     crearPartida,
+    getLevelbyId,
 //    getMetaData,
 //    setCounter,
 //    getCounter,
