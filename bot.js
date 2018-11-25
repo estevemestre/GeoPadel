@@ -51,18 +51,20 @@ bot.command('start', ctx => {
         if (data === null) { // Vol dir que no hi ha cap usuari
             console.log("No he trobat a cap usuari, vaig a insertar-lo");
             //Insert 
-            usuariService.saveUser(ctx.message);
-            // Una manera de solventar el problema que tenim seria:
-            // GUARDAR EN LA VARIABLE DATA[0] les dades del ctx.message
+//            usuariService.saveUser(ctx.message);
+//            // Una manera de solventar el problema que tenim seria:
+//            // GUARDAR EN LA VARIABLE DATA[0] les dades del ctx.message
+////            
+//            dadesUserActual = [{
+//                    "users_id": ctx.message.from.id,
+//                    "users_first_name": ctx.message.from.first_name,
+//                    "users_last_name": ctx.message.from.last_name,
+//                    "users_username": ctx.message.from.username,
+//                    "users_levels_id": 0,
+//                    "users_levels_desc": 'No te nivell'
+//                }];
 //            
-            dadesUserActual = [{
-                    "users_id": ctx.message.from.id,
-                    "users_first_name": ctx.message.from.first_name,
-                    "users_last_name": ctx.message.from.last_name,
-                    "users_username": ctx.message.from.username,
-                    "users_levels_id": 0,
-                    "users_levels_desc": 'No te nivell'
-                }];
+//            usuariActual = dadesUserActual[0];
 
             usuariActual = dadesUserActual[0];
 
@@ -71,15 +73,15 @@ bot.command('start', ctx => {
         } else { // Si he trobat al usuari
 
             usuariActual = data[0];
-            
+
             // ACI deuriem guardar la descripcio del nivell que te 
-            
+
             /// Un metedode que jo panli l'id del nivell en retoranara si es principant o intermeig 
-            
-            usuariActual.users_levels_desc = usuariService.getLevelbyId(usuariActual.users_levels_id);
-            
-            
-            var nom = usuariActual.users_first_name;
+
+//            usuariActual.users_levels_desc = usuariService.getLevelbyId(usuariActual.users_levels_id);
+//            
+//            
+            var nom = ctx.message.from.first_name;
             console.log("Si que he trobat al usuari: ", nom);
             ctx.reply("Benvingut/da de nou, " + nom + ". Qué dessitges fer?\n\
 \n\
@@ -87,12 +89,25 @@ bot.command('start', ctx => {
 /buscarPartida (Buscar una nova partida)\n\
 /nivell (Canviar el teu nivell)\n\
 /ajuda (Llistat d'ajuda)\n\
-/parar (Finalitzar el bot)");
+/parar (Finalitzar el bot)\n\
+/botones");
         }
 
     });
 
-
+//   bot.command(['botones'],(ctx) => ctx.telegram.sendMessage(
+//                    ctx.from.id,
+//                    'Ací tens totes les partides disponibles:',
+//                    inlineMessageRatingKeyboard)
+//        );
+//
+//        const inlineMessageRatingKeyboard = Markup.inlineKeyboard([
+//            Markup.callbackButton('Piles', 'Ppiles'),
+//            Markup.callbackButton('Oliva', 'Ooliva')
+//        ]).extra();
+//
+//        bot.action('Ppiles', (ctx) => ctx.editMessageText('🎉 Awesome! 🎉'))
+//        bot.action('Ooliva', (ctx) => ctx.editMessageText('okey'))
 
 
 
@@ -103,12 +118,12 @@ bot.command('start', ctx => {
 
     bot.command(['principiant', 'intermig', 'avancat'], ctx => {
         usuariService.setLevelByID(ctx.from.id, ctx.message.text);
-        
-        
+
+
         // EMPALMAR LAVARIABLE QUE ELL ENS ENVIA
-          usuariActual.users_levels_desc = ctx.message.text;
-        
-        
+        usuariActual.users_levels_desc = ctx.message.text;
+
+
 
         ctx.reply("Nivell modificat correctament. Que dessitges fer ara?\n\
 \n\
@@ -147,21 +162,60 @@ Totes les partides: /totesPartides");
             console.log("dia: " + diaymes[0] + "mes: " + diaymes[1]);
         });
 
-        bot.command(['totesPartides'], ctx => {
-            ctx.reply("Ara et busque totes les partides");
-            partidesService.getPartides().then(data => {
-                var descripcio;
-                var numJugadors;
-                for (var i = 0; i < data.length; i++) {
-                    console.log("data", data[i]);
-                    descripcio = data[i].partides_desc;
-                    numJugadors = data[i].partides_num_jugadors;
+//        bot.command(['totesPartides'], ctx => {
+//            ctx.reply("Ara et busque totes les partides");
+//
+//            partidesService.getPartides().then(data => {
+//
+//
+//                var descripcio;
+//                var numJugadors;
+//
+//
+//                for (var i = 0; i < data.length; i++) {
+////                    console.log("data", data[i]);
+//                    descripcio = data[i].partides_desc;
+//                    numJugadors = data[i].partides_num_jugadors;
+//
+//
+//                }
+//                bot.action('Ppiles', (ctx) => ctx.editMessageText('🎉 Awesome! 🎉'))
+//                bot.action('Ooliva', (ctx) => ctx.editMessageText('okey'))
+//
+//            });
+//
+//            ctx.telegram.sendMessage(
+//                    ctx.from.id,
+//                    'Ací tens totes les partides disponibles:',
+//                    inlineMessageRatingKeyboard);
+//
+//            const inlineMessageRatingKeyboard = Markup.inlineKeyboard([
+//                Markup.callbackButton('Piles', 'Ppiles'),
+//                Markup.callbackButton('Oliva', 'Ooliva')
+//            ]).extra();
+//
+//        });
+        
+        //BOTOOONS QUE FUNCIONEN BEEEEE
 
-                    ctx.reply("Descripció: " + descripcio + ", numero jugadors: " + numJugadors);
-                }
-            });
+        bot.command(['totesPartides'], (ctx) => ctx.telegram.sendMessage(
+                    ctx.from.id,
+                    'Ací tens totes les partides disponibles:',
+                    inlineMessageRatingKeyboard)
+        );
 
-        });
+        
+
+            const inlineMessageRatingKeyboard = Markup.inlineKeyboard([
+                Markup.callbackButton('Piles', 'Ppiles'),
+                Markup.callbackButton('Oliva', 'Ooliva')
+            ]).extra();
+
+        bot.action('Ppiles', (ctx) => ctx.editMessageText('🎉 Awesome! 🎉'))
+        bot.action('Ooliva', (ctx) => ctx.editMessageText('okey'))
+
+ // FINAAAAAAL BOTOOONS QUE FUNCIONEN BEEEEE
+
 
     }); // FINAL BUSCAR PARTIDES
 
@@ -176,7 +230,7 @@ Totes les partides: /totesPartides");
 //        logMsg(ctx);
 //        logOutMsg(ctx, helpMsg);
         ctx.reply("Yee ninot ", usuariActual.users_first_name);
-        ctx.reply("Yee ninot +" + usuariActual.users_levels_desc );
+        ctx.reply("Yee ninot +" + usuariActual.users_levels_desc);
 
     });
 
