@@ -263,44 +263,34 @@ Totes les partides: /totesPartides");
         console.log("dia: " + diaymes[0] + "mes: " + diaymes[1]);
     });
 
-
-//    console.log("Bucar si en eixa data hi ha una partida del nivell del jugador ");
-
+    bot.command(['totesPartides'], ctx => {
 
 
 
-
-//    bot.command(['/data'], ctx => {
-//        console.log("test" + ctx.message);
-//    });
-
-
-
-    // yo inserte en la BD
-});
-
-
-
-
-
-bot.command(['totesPartides'], ctx => {
-    console.log("1Vull saber totes les manolo" + ctx.message.text);
-
-    console.log("2Vull saber totes les partides" + ctx.message.text);
-
-
-
-    console.log("3Vull saber totes les partides" + ctx.message.text);
-
-    console.log("4Vull saber totes les partides" + ctx.message.text);
-
-
-
-//    ctx.reply("Ara et busque totes les partides");
+        ctx.reply("Ara et busque totes les partides");
 //
-//    partidesService.getPartides().then(data => {
+        partidesService.getPartides().then(data => {
+
+            var descripcio;
+            var numJugadors;
+
+//            for (var i = 0; i < data.length; i++) {
+//                console.log("data", data[i]);
+////                console.log("Partida " + i + ": " + data[0].partides_desc + "\n");
+//                descripcio = data[i].partides_desc;
+//                numJugadors = data[i].partides_num_jugadors;
 //
-//        console.log("Dentro de Partidaaaaa Serrvice");
+//                ctx.reply("Descripció: " + descripcio + ", numero jugadors: " + numJugadors);
+//            }
+
+//            ctx.reply("per favor....", Extra.markup(Markup.forceReply()))
+            const testMenu = Telegraf.Extra
+                    .markdown()
+                    .markup((m) => m.inlineKeyboard([
+                            m.callbackButton('Test button', 'test')
+                        ]));
+            bot.action('test', (ctx) => ctx.answerCallbackQuery('Yay!'));
+//        ctx.reply("partides_id: " + data.partides_id + ",  partides_desc: " + data.partides_desc);
 //
 ////        if (data === null) { // Vol dir que no hi ha cap usuari
 ////           
@@ -308,9 +298,14 @@ bot.command(['totesPartides'], ctx => {
 ////           
 ////        }
 ////        ctx.reply("Benvingut", nom);
-//    });
+        });
+
+    });
 
 });
+
+
+
 
 
 

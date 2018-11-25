@@ -38,38 +38,41 @@ con.connect(function (err) {
 
 // Retorna totes les partides
 function getPartides() {
-   
+   console.log("dins de get Partides");
    var partida = null;
+   var partidas = [];
+   
    
     return new Promise(resolve => {
-        con.query("SELECT * FROM partides" +  function (err, result, fields) {
+        con.query("SELECT * FROM partides", function (err, result, fields) {
             if (err)
                 throw err;
             /// nomdelmetode.responseData() {sdSADDSAASD} 
             Object.keys(result).forEach(function (key) {
                 var row = result[key];
-                partida = [
-                    {
+                
+                   partida = {
                         "partides_id": row.partides_id,
                         "partides_desc": row.partides_desc,
                         "partides_num_jugadors": row.partides_num_jugadors,
                         "partides_pistes_id": row.partides_pistes_id,
                         "partides_levels_id": row.partides_levels_id,
                         "partides_data": row.partides_data
-                    }
-                ];
+                    };
+                
+                partidas.push(partida);
 
                 // Cridara a un metodo per a que responguera 
 //                return user;
             });
             if (partida === null) {
                 console.log("No hi ha partida");
-                resolve(partida);
+                resolve(partidas);
 
 
             } else {
                 console.log("Si hi ha partida ");
-                resolve(partida);
+                resolve(partidas);
             }
 
 
