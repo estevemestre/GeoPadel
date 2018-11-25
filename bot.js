@@ -274,22 +274,29 @@ Totes les partides: /totesPartides");
             var descripcio;
             var numJugadors;
 
-//            for (var i = 0; i < data.length; i++) {
-//                console.log("data", data[i]);
-////                console.log("Partida " + i + ": " + data[0].partides_desc + "\n");
-//                descripcio = data[i].partides_desc;
-//                numJugadors = data[i].partides_num_jugadors;
-//
-//                ctx.reply("Descripció: " + descripcio + ", numero jugadors: " + numJugadors);
-//            }
+            for (var i = 0; i < data.length; i++) {
+                console.log("data", data[i]);
+//                console.log("Partida " + i + ": " + data[0].partides_desc + "\n");
+                descripcio = data[i].partides_desc;
+                numJugadors = data[i].partides_num_jugadors;
+
+                ctx.reply("Descripció: " + descripcio + ", numero jugadors: " + numJugadors);
+            }
 
 //            ctx.reply("per favor....", Extra.markup(Markup.forceReply()))
-            const testMenu = Telegraf.Extra
-                    .markdown()
-                    .markup((m) => m.inlineKeyboard([
-                            m.callbackButton('Test button', 'test')
-                        ]));
-            bot.action('test', (ctx) => ctx.answerCallbackQuery('Yay!'));
+            
+            let replyOptions = {
+		reply_markup: {
+			resize_keyboard: true,
+			one_time_keyboard: true,
+			keyboard: [
+				['yes'],
+				['no']
+			],
+		},
+	};
+	ctx.reply(null, replyOptions);
+            
 //        ctx.reply("partides_id: " + data.partides_id + ",  partides_desc: " + data.partides_desc);
 //
 ////        if (data === null) { // Vol dir que no hi ha cap usuari
