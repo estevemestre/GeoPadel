@@ -37,7 +37,7 @@ con.connect(function (err) {
 
 
 // Retorna totes les partides
-function getPartides() {
+function getPartides(idNivell) {
    console.log("dins de get Partides");
    var partida = null;
    var partidas = [];
@@ -47,9 +47,9 @@ function getPartides() {
         
         // QUIN NIVELL TE EL USUARI ???
         
+       
         
-        
-        con.query("SELECT * FROM partides", function (err, result, fields) {
+        con.query("SELECT * FROM partides WHERE partides_num_jugadors < 4 AND partides_levels_id = " + idNivell, function (err, result, fields) {
             if (err)
                 throw err;
             /// nomdelmetode.responseData() {sdSADDSAASD} 

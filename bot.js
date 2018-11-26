@@ -83,13 +83,12 @@ bot.command('start', ctx => {
                 var nom = ctx.message.from.first_name;
                 console.log("Si que he trobat al usuari: ", nom);
                 ctx.reply("Benvingut/da de nou, " + nom + ". Qué dessitges fer?\n\
-                            \n\
-                            /crearPartida (Crear una nova partida)\n\
-                            /buscarPartida (Buscar una nova partida)\n\
-                            /nivell (Canviar el teu nivell)\n\
-                            /ajuda (Llistat d'ajuda)\n\
-                            /parar (Finalitzar el bot)\n\
-                            /botones");
+/crearPartida (Crear una nova partida)\n\
+/buscarPartida (Buscar una nova partida)\n\
+/nivell (Canviar el teu nivell)\n\
+/ajuda (Llistat d'ajuda)\n\
+/parar (Finalitzar el bot)\n\
+ /botones");
             }
         }
     });
@@ -166,26 +165,34 @@ Totes les partides: /totesPartides");
 
         bot.command(['totesPartides'], ctx => {
 
-
-
-            partidesService.getPartides().then(data => {
+            partidesService.getPartides(usuariActual.users_levels_id).then(data => {
                 var myData = [];
                 for (var i = 0; i < data.length; i++) {
-                    myData.push(Markup.callbackButton("Descripcio " + data[i].partides_desc + " Numero de jugadors" + data[i].partides_num_jugadors, "Descripcio " + data[i].partides_desc + " Numero de jugadors" + data[i].partides_num_jugadors)); // add at the end 
+                    myData.push(Markup.callbackButton(data[i].partides_desc + " - " + data[i].partides_num_jugadors + " jugadors", "partida-" + data[i].partides_id)); // add at the end 
+                    bot.action("partida-"+ data[i].partides_id, (ctx) => partidaSeleccionada(ctx, data));
                 }
-                    ctx.telegram.sendMessage(
-                            ctx.from.id,
-                            'Ací tens totes les partides disponibles:',
-                            Markup.inlineKeyboard(
-                                    [
-                                        myData
-                                    ]
-                                    ).extra()
-                            );
+                ctx.telegram.sendMessage(
+                        ctx.from.id,
+                        'Ací tens totes les partides disponibles:',
+                        Markup.inlineKeyboard(
+                                [
+                                    myData
+                                ]
+                                ).extra()
+                        );
             });
         });
 
+//        bot.action("partida-3", (ctx) => partidaSeleccionada(ctx));
 
+
+        function partidaSeleccionada(ctx,data) {
+//            console.log(data);
+            ctx.editMessageText('Partida seleccionada! 🎉')
+            console.log("quantes voltes entres bolsa?");
+        }
+
+//      
 
 //        bot.command(['totesPartides'], ctx => {
 //            ctx.reply("Ara et busque totes les partides");
