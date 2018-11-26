@@ -12,6 +12,10 @@ const partidesService = require('./services/partidesService');
 //Service Partides
 //const pistaService = require('./services/pistaService');
 
+
+
+
+
 const config = require('./config');
 
 const bot = new Telegraf(config.botToken);
@@ -41,58 +45,53 @@ const aboutMsg = "Este bot ha sigut creat per @onademar. Espere que siga de la v
 var user = ["asd"];
 
 var usuariActual;
-
 // Final variables globals
 
 //***------START-----------------------
 bot.command('start', ctx => {
 
     usuariService.getUserByID(ctx.from.id).then(data => {
-        if (data === null) { // Vol dir que no hi ha cap usuari
+        if (data === null) { // No te cap nivell
             console.log("No he trobat a cap usuari, vaig a insertar-lo");
             //Insert 
-//            usuariService.saveUser(ctx.message);
-//            // Una manera de solventar el problema que tenim seria:
-//            // GUARDAR EN LA VARIABLE DATA[0] les dades del ctx.message
-////            
-//            dadesUserActual = [{
-//                    "users_id": ctx.message.from.id,
-//                    "users_first_name": ctx.message.from.first_name,
-//                    "users_last_name": ctx.message.from.last_name,
-//                    "users_username": ctx.message.from.username,
-//                    "users_levels_id": 0,
-//                    "users_levels_desc": 'No te nivell'
-//                }];
-//            
+            usuariService.saveUser(ctx.message);
+//    
+            usuariActual = [{
+                    "users_id": ctx.message.from.id,
+                    "users_first_name": ctx.message.from.first_name,
+                    "users_last_name": ctx.message.from.last_name,
+                    "users_username": ctx.message.from.username,
+                    "users_levels_id": 0,
+                    "users_levels_desc": 'No te nivell'
+                }];
+
+
 //            usuariActual = dadesUserActual[0];
+            ctx.reply("Benvingut " + usuariActual.users_first_name + " a GeoPadel. Quin nivell tens? ( /avancat /intermig /principiant ) ");
 
-            usuariActual = dadesUserActual[0];
-
-
-            ctx.reply("Benvingut a GeoPadel. Quin nivell tens? ( /avancat /intermig /principiant ) ");
-        } else { // Si he trobat al usuari
+        } else { // Per obligar l'usuari que es logeje
 
             usuariActual = data[0];
 
-            // ACI deuriem guardar la descripcio del nivell que te 
+            //Oblga que no puga veure el menu si no pulsa l'inici
+            if (usuariActual.users_levels_id === 0) {
+                ctx.reply("Benvingut " + usuariActual.users_first_name + " a GeoPadel. Quin nivell tens? ( /avancat /intermig /principiant ) ");
 
-            /// Un metedode que jo panli l'id del nivell en retoranara si es principant o intermeig 
 
-//            usuariActual.users_levels_desc = usuariService.getLevelbyId(usuariActual.users_levels_id);
-//            
-//            
-            var nom = ctx.message.from.first_name;
-            console.log("Si que he trobat al usuari: ", nom);
-            ctx.reply("Benvingut/da de nou, " + nom + ". Qué dessitges fer?\n\
-\n\
-/crearPartida (Crear una nova partida)\n\
-/buscarPartida (Buscar una nova partida)\n\
-/nivell (Canviar el teu nivell)\n\
-/ajuda (Llistat d'ajuda)\n\
-/parar (Finalitzar el bot)\n\
-/botones");
+
+            } else {
+                var nom = ctx.message.from.first_name;
+                console.log("Si que he trobat al usuari: ", nom);
+                ctx.reply("Benvingut/da de nou, " + nom + ". Qué dessitges fer?\n\
+                            \n\
+                            /crearPartida (Crear una nova partida)\n\
+                            /buscarPartida (Buscar una nova partida)\n\
+                            /nivell (Canviar el teu nivell)\n\
+                            /ajuda (Llistat d'ajuda)\n\
+                            /parar (Finalitzar el bot)\n\
+                            /botones");
+            }
         }
-
     });
 
 //   bot.command(['botones'],(ctx) => ctx.telegram.sendMessage(
@@ -152,6 +151,8 @@ bot.command('start', ctx => {
         ctx.reply("Com dessitges buscar la partida:\n\
 Per un dia: /partida dia-mes (Ex: /partida 13-10)\n\
 Totes les partides: /totesPartides");
+
+
         bot.command(['partida'], ctx => {
             console.log("PAAAAAAAAARTIDA" + ctx.message.text);
 
@@ -161,6 +162,30 @@ Totes les partides: /totesPartides");
             ctx.reply("Has elegit el dia: " + diaymes[0] + " del mes: " + diaymes[1]);
             console.log("dia: " + diaymes[0] + "mes: " + diaymes[1]);
         });
+
+
+        bot.command(['totesPartides'], ctx => {
+
+
+
+            partidesService.getPartides().then(data => {
+                var myData = [];
+                for (var i = 0; i < data.length; i++) {
+                    myData.push(Markup.callbackButton("Descripcio " + data[i].partides_desc + " Numero de jugadors" + data[i].partides_num_jugadors, "Descripcio " + data[i].partides_desc + " Numero de jugadors" + data[i].partides_num_jugadors)); // add at the end 
+                }
+                    ctx.telegram.sendMessage(
+                            ctx.from.id,
+                            'Ací tens totes les partides disponibles:',
+                            Markup.inlineKeyboard(
+                                    [
+                                        myData
+                                    ]
+                                    ).extra()
+                            );
+            });
+        });
+
+
 
 //        bot.command(['totesPartides'], ctx => {
 //            ctx.reply("Ara et busque totes les partides");
@@ -195,26 +220,33 @@ Totes les partides: /totesPartides");
 //            ]).extra();
 //
 //        });
-        
+
         //BOTOOONS QUE FUNCIONEN BEEEEE
 
-        bot.command(['totesPartides'], (ctx) => ctx.telegram.sendMessage(
-                    ctx.from.id,
-                    'Ací tens totes les partides disponibles:',
-                    inlineMessageRatingKeyboard)
-        );
+//        bot.command(['totesPartides'], (ctx) => ctx.telegram.sendMessage(
+//                    ctx.from.id,
+//                    'Ací tens totes les partides disponibles:',
+//                    inlineMessageRatingKeyboard
+//
+//
+//                    ));
 
-        
+//        const inlineMessageRatingKeyboard = Markup.inlineKeyboard([
+//            Markup.callbackButton('Piles', 'Ppiles'),
+//            Markup.callbackButton('Oliva', 'Ooliva')
+//        ]).extra();
 
-            const inlineMessageRatingKeyboard = Markup.inlineKeyboard([
-                Markup.callbackButton('Piles', 'Ppiles'),
-                Markup.callbackButton('Oliva', 'Ooliva')
-            ]).extra();
 
-        bot.action('Ppiles', (ctx) => ctx.editMessageText('🎉 Awesome! 🎉'))
-        bot.action('Ooliva', (ctx) => ctx.editMessageText('okey'))
 
- // FINAAAAAAL BOTOOONS QUE FUNCIONEN BEEEEE
+
+
+
+
+
+//        bot.action('Ppiles', (ctx) => ctx.editMessageText('🎉 Awesome! 🎉'));
+//        bot.action('Ooliva', (ctx) => ctx.editMessageText('okey'));
+
+        // FINAAAAAAL BOTOOONS QUE FUNCIONEN BEEEEE
 
 
     }); // FINAL BUSCAR PARTIDES
