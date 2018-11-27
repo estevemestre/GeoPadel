@@ -164,20 +164,11 @@ Totes les partides: /totesPartides");
 
 
 
-        bot.command(['totesPartides'], ctx => {
+     bot.command('totesPartides', ({ reply }) => {
 
             partidesService.getPartides(usuariActual.users_levels_id).then(data => {
                 if (data.length === 0) { // No tens cap partida amb el teu nivell 
                     ctx.reply("No he trobat cap partida per poder jugar, si vols pots crear una partida:  /crearPartida");
-
-
-                    const aboutMenu = Telegraf.Extra
-                            .markdown()
-                            .markup((m) => m.keyboard([
-                                    m.callbackButton('⬅️ Back')
-                                ]).resize());
-
-
 
 
 
@@ -189,15 +180,28 @@ Totes les partides: /totesPartides");
                         myData.push(Markup.callbackButton(data[i].partides_desc + " - " + data[i].partides_num_jugadors + " jugadors \n", "partida-" + data[i].partides_id)); // add at the end 
                         bot.action("partida-" + data[i].partides_id, (ctx) => partidaSeleccionada(ctx, data));
                     }
-
-                    ctx.telegram.sendMessage(
-                            ctx.from.id,
-                            'Ací tens totes les partides disponibles:',
-//                                Markup.inlineKeyboard(['Coke', 'Pepsi'])
-                            Markup.inlineKeyboard(
-                                    myData
-                                    ).extra()
+                    
+                    
+                    
+                    return reply('totes les partides', Markup
+                            .keyboard([
+                                ['COlumna una', '😎 COlumna 2'], // Row1 with 2 buttons
+                                ['COlumna una', '📞 COlumna 2'], // Row2 with 2 buttons
+                                ['COlumna una', 'COlumna 2', 'COlumna 3'] // Row3 with 3 buttons
+                            ])
+                            .oneTime()
+                            .resize()
+                            .extra()
                             );
+
+//                    ctx.telegram.sendMessage(
+//                            ctx.from.id,
+//                            'Ací tens totes les partides disponibles:',
+////                                Markup.inlineKeyboard(['Coke', 'Pepsi'])
+//                            Markup.inlineKeyboard(
+//                                    myData
+//                                    ).extra()
+//                            );
 
 
 
