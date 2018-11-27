@@ -108,12 +108,9 @@ bot.command('start', ctx => {
 //        bot.action('Ooliva', (ctx) => ctx.editMessageText('okey'))
 
 
-
     bot.command(['nivell'], ctx => {
         ctx.reply("Quin nivell tens? ( /avancat /intermig /principiant ) ");
     });
-
-
     bot.command(['principiant', 'intermig', 'avancat'], ctx => {
         usuariService.setLevelByID(ctx.from.id, ctx.message.text);
 
@@ -144,7 +141,6 @@ bot.command('start', ctx => {
     bot.command(['descripcionPista'], ctx => {
     });
 
-
     /**--------------BUSCAR PARTIDES--------------------**/
     bot.command(['buscarPartida'], ctx => {
         ctx.reply("Com dessitges buscar la partida:\n\
@@ -163,32 +159,86 @@ Totes les partides: /totesPartides");
         });
 
 
+
+
+
+
+
         bot.command(['totesPartides'], ctx => {
 
             partidesService.getPartides(usuariActual.users_levels_id).then(data => {
-                var myData = [];
-                for (var i = 0; i < data.length; i++) {
-                    myData.push(Markup.callbackButton(data[i].partides_desc + " - " + data[i].partides_num_jugadors + " jugadors", "partida-" + data[i].partides_id)); // add at the end 
-                    bot.action("partida-"+ data[i].partides_id, (ctx) => partidaSeleccionada(ctx, data));
-                }
-                ctx.telegram.sendMessage(
-                        ctx.from.id,
-                        'Ací tens totes les partides disponibles:',
-                        Markup.inlineKeyboard(
-                                [
+                if (data.length === 0) { // No tens cap partida amb el teu nivell 
+                    ctx.reply("No he trobat cap partida per poder jugar, si vols pots crear una partida:  /crearPartida");
+
+
+                    const aboutMenu = Telegraf.Extra
+                            .markdown()
+                            .markup((m) => m.keyboard([
+                                    m.callbackButton('⬅️ Back')
+                                ]).resize());
+
+
+
+
+
+
+                } else {
+
+                    var myData = [];
+                    for (var i = 0; i < data.length; i++) {
+                        myData.push(Markup.callbackButton(data[i].partides_desc + " - " + data[i].partides_num_jugadors + " jugadors \n", "partida-" + data[i].partides_id)); // add at the end 
+                        bot.action("partida-" + data[i].partides_id, (ctx) => partidaSeleccionada(ctx, data));
+                    }
+
+                    ctx.telegram.sendMessage(
+                            ctx.from.id,
+                            'Ací tens totes les partides disponibles:',
+//                                Markup.inlineKeyboard(['Coke', 'Pepsi'])
+                            Markup.inlineKeyboard(
                                     myData
-                                ]
-                                ).extra()
-                        );
+                                    ).extra()
+                            );
+
+
+
+//                     ctx.replyWithHTML('<b>TITOL</b> or <i>TITOL?</i>', Extra.markup(
+//                            Markup.inlineKeyboard(
+//                                    myData
+//                                    )
+//                            ));
+
+//            
+//                    return ctx.replyWithHTML('<b>TITOL</b> or <i>TITOL?</i>', Extra.markup(
+//                            Markup.keyboard(myData)
+//                            ));
+
+
+//                    ctx.telegram.sendMessage(
+//                            ctx.from.id,
+//                            'Ací tens totes les partides disponibles:',
+////                                Markup.inlineKeyboard(['Coke', 'Pepsi'])
+//                            Markup.inlineKeyboard(
+//                                    [
+//                                        myData
+//                                    ],
+//                                    ).extra()
+//                            );
+//                    
+                    //                    bot.command('simple', (ctx) => {
+//                        return ctx.replyWithHTML('<b>Coke</b> or <i>Pepsi?</i>', Extra.markup(
+//                                Markup.keyboard(['Coke', 'Pepsi'])
+//                                ));
+//                    });
+                }
             });
         });
 
 //        bot.action("partida-3", (ctx) => partidaSeleccionada(ctx));
 
 
-        function partidaSeleccionada(ctx,data) {
+        function partidaSeleccionada(ctx, data) {
 //            console.log(data);
-            ctx.editMessageText('Partida seleccionada! 🎉')
+            ctx.editMessageText('Partida seleccionada! 🎉');
             console.log("quantes voltes entres bolsa?");
         }
 
@@ -320,6 +370,21 @@ function logOutMsg(ctx, text) {
         id: ctx.chat.id
     }, text);
 }
+
+
+bot.command('inline', (ctx) => {
+    return ctx.reply('<b>Coke</b> or <i>Pepsi?</i>', Extra.HTML().markup((m) =>
+        m.inlineKeyboard([
+            m.callbackButton('Cokejjjjjjjj', 'Coke'),
+            m.callbackButton('Pepkkkkkkkkkkkkksi', 'Pepsi')
+        ])))
+})
+
+bot.command('simple', (ctx) => {
+    return ctx.replyWithHTML('<b>Cokeeeeeeeeeeeeeeee</b> or <i>Pepsieeeeeeeeeeeeeee?</i>', Extra.markup(
+            Markup.keyboard(['Coiiiiiiiiiiiiiiiiscfuygfgjhjghjhgfjghfjjjjjjjjjjjjjjdajjjjiiiiiiiiike', 'Pehhhhhhhhhhhhhhhgggggggggggggggggggggggggghhhhhhhhhpsi', 'sadasdadsdasdsa', 'adsdsaads'])
+            ))
+})
 
 bot.startPolling();
 

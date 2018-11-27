@@ -132,13 +132,13 @@ bot.command(['nivell'], ctx => {
 bot.command(['principiant', 'intermig', 'avancat'], ctx => {
     usuariService.setLevelByID(ctx.from.id, ctx.message.text);
 
-    ctx.reply("Nivell modificat correctament. Que dessitges fer ara?\n\
-\n\
-/crearPartida (Crear una nova partida)\n\
-/buscarPartida (Buscar una nova partida)\n\
-/nivell (Canviar el teu nivell)\n\
-/ajuda (Llistat d'ajuda)\n\
-/parar (Finalitzar el bot)");
+       ctx.reply("Nivell modificat correctament. Que dessitges fer ara?\n\
+        \n\
+        /crearPartida (Crear una nova partida)\n\
+        /buscarPartida (Buscar una nova partida)\n\
+        /nivell (Canviar el teu nivell)\n\
+        /ajuda (Llistat d'ajuda)\n\
+        /parar (Finalitzar el bot)");
 
 });
 
