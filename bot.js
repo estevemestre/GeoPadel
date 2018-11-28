@@ -242,37 +242,39 @@ Totes les partides: /totesPartides");
 bot.action(/partida+/, (ctx, next) => {
 //    return ctx.reply(ctx.callbackQuery.data);
     partidaSeleccionada(ctx, ctx.callbackQuery.data);
-})
+});
 
 function partidaSeleccionada(ctx, data) {
 
     var codiPartida = data.split("-", 3);
+    console.log("EL codi de la partida" + codiPartida);
 
-      partidesService.getPartidaID(codiPartida[1]).then(data => {
-          console.log("DATA GENT PARTIDA ID", data);
-          var descripcionPartida = data.partides_desc;
-          var numJugadors = data.partides_num_jugadors;
-          var fechaPartida = data.partides_data;
-          
-          ctx.editMessageText('Partida seleccionada! 🎉 \n\
-\n\
-Descripció de la partida: ' + descripcionPartida + "\n\
-Nº Usuaris: " + numJugadors + "\n\
-Hora: " + fechaPartida);
-        
-         partidesService.actUsuariosPartidas(codiPartida[1], numJugadors);
-         
-         
-         partidesService.afegirPartidesUsers(codiPartida[1], ctx.from.id);
-         
-         
-      });
-      
-      
-      
 
-    console.log(data);
-    console.log("quantes voltes entres bolsa?");
+
+
+    partidesService.getPartidaID(codiPartida[1]).then(data => {
+        console.log("DATA GENT PARTIDA ID", data);
+        var descripcionPartida = data.partides_desc;
+        var numJugadors = data.partides_num_jugadors;
+        var fechaPartida = data.partides_data;
+
+        ctx.editMessageText('Partida seleccionada! 🎉 \n\
+            \n\
+            Descripció de la partida: ' + descripcionPartida + "\n\
+            Nº Usuaris: " + numJugadors + "\n\
+            Hora: " + fechaPartida);
+
+        // Comprove que l'usuari no existeix en eixa partida
+        // partidesUsuaris tindre que fer un select amb l'id del usuari i la partida
+        partidesService.getPartidaUsuarisBYUsuariPartida(ctx.from.id, codiPartida[1]).then(data => {
+            if (data.length === 0) { // No estas en eixa partida aixi que vaig afegirte
+                partidesService.updatePartida(codiPartida[1], numJugadors); //Actualitza en la taula partida i suma un jugador         
+                partidesService.afegirPartidesUsers(codiPartida[1], ctx.from.id); //Afegisc l'usuari i la partida en la taula usuarisPartides
+            } else {
+                ctx.reply("No el pots donar d'alta en  " + descripcionPartida + " ja que ja estas donat d'alta anteriorment");
+            }
+        });
+    });
 }
 
 

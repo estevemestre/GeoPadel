@@ -42,11 +42,8 @@ function getPartides(idNivell) {
     var partida = null;
     var partidas = [];
 
-
     return new Promise(resolve => {
-
         // QUIN NIVELL TE EL USUARI ???
-
         con.query("SELECT * FROM partides WHERE partides_num_jugadors < 4 AND partides_levels_id = " + idNivell, function (err, result, fields) {
             if (err)
                 throw err;
@@ -99,8 +96,39 @@ function getPartidaID(idPartida) {
     });
 }
 
+// Busca si eixe usuari ja esta en una partida
+function getPartidaUsuarisBYUsuariPartida(usuari, partida) {
+    var partides_users = null;
+    
+
+    return new Promise(resolve => {
+
+    var a = "SELECT * FROM partides_users WHERE partides_users_users_id ="+usuari+" AND partides_users_partides_id =" + partida;
+    console.log("a" + a);
+        con.query("SELECT * FROM partides_users WHERE partides_users_users_id ="+usuari+" AND partides_users_partides_id =" + partida, function (err, result, fields) {
+            if (err)
+                throw err;
+            /// nomdelmetode.responseData() {sdSADDSAASD} 
+            Object.keys(result).forEach(function (key) {
+                var row = result[key];
+
+                partides_users = {
+                    "partides_users_id": row.partides_users_id
+                };
+               
+            });
+            resolve(partides_users);
+        });
+    });
+}
+
+
+
+
+
+
 // Actualizar los usuarios de una partida
-function actUsuariosPartidas(idPartida, jugadors) {
+function updatePartida(idPartida, jugadors) {
     console.log("Actualitzar partida");
      var numJugadors = jugadors + 1;
 
@@ -116,9 +144,8 @@ function actUsuariosPartidas(idPartida, jugadors) {
 // Afegir l'usuari a una partida
 function afegirPartidesUsers(idPartida, idjugador) {
     console.log("Afegir jugador a partida");
-    
-
-    var sql = "INSERT INTO partides_users(partides_users_id, partides_users_users_id, partides_users_partides_id) VALUES ('"+null + "', '" +idjugador + "', '"+ idPartida +")";
+    var sql = "INSERT INTO partides_users(partides_users_id, partides_users_users_id, partides_users_partides_id) VALUES ('"+null + "', '" +idjugador + "', '"+ idPartida +"')";
+    console.log("HOLA,"+sql);
     con.query(sql, function (err, result) {
         if (err)
             throw err;
@@ -227,8 +254,9 @@ module.exports = {
     setLevelByID,
     crearPartida,
     getPartidaID,
-    actUsuariosPartidas,
-    afegirPartidesUsers
+    updatePartida,
+    afegirPartidesUsers,
+    getPartidaUsuarisBYUsuariPartida
 //    getMetaData,
 //    setCounter,
 //    getCounter,
