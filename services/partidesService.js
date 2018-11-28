@@ -67,10 +67,69 @@ function getPartides(idNivell) {
             resolve(partidas);
         });
     });
-
-
-
 }
+
+// Retorna una partida per id
+function getPartidaID(idPartida) {
+    console.log("dins de get Partides ID");
+    var partida = null;
+    
+
+    return new Promise(resolve => {
+
+        con.query("SELECT * FROM partides WHERE partides_id =" + idPartida, function (err, result, fields) {
+            if (err)
+                throw err;
+            /// nomdelmetode.responseData() {sdSADDSAASD} 
+            Object.keys(result).forEach(function (key) {
+                var row = result[key];
+
+                partida = {
+                    "partides_id": row.partides_id,
+                    "partides_desc": row.partides_desc,
+                    "partides_num_jugadors": row.partides_num_jugadors,
+                    "partides_pistes_id": row.partides_pistes_id,
+                    "partides_levels_id": row.partides_levels_id,
+                    "partides_data": row.partides_data
+                };
+               
+            });
+            resolve(partida);
+        });
+    });
+}
+
+// Actualizar los usuarios de una partida
+function actUsuariosPartidas(idPartida, jugadors) {
+    console.log("Actualitzar partida");
+     var numJugadors = jugadors + 1;
+
+    var sql = "UPDATE partides SET partides_num_jugadors=" + numJugadors + " WHERE partides_id = " + idPartida;
+    con.query(sql, function (err, result) {
+        if (err)
+            throw err;
+    });
+}
+
+
+
+// Afegir l'usuari a una partida
+function afegirPartidesUsers(idPartida, idjugador) {
+    console.log("Afegir jugador a partida");
+    
+
+    var sql = "INSERT INTO partides_users(partides_users_id, partides_users_users_id, partides_users_partides_id) VALUES ('"+null + "', '" +idjugador + "', '"+ idPartida +")";
+    con.query(sql, function (err, result) {
+        if (err)
+            throw err;
+    });
+}
+
+
+
+
+
+
 
 function savePartida(ctx) {
     console.log(ctx.message.text);
@@ -166,7 +225,10 @@ module.exports = {
     savePartida,
     resolveAfter2Seconds,
     setLevelByID,
-    crearPartida
+    crearPartida,
+    getPartidaID,
+    actUsuariosPartidas,
+    afegirPartidesUsers
 //    getMetaData,
 //    setCounter,
 //    getCounter,
