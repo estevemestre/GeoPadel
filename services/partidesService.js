@@ -71,7 +71,6 @@ function getPartidaID(idPartida) {
     console.log("dins de get Partides ID");
     var partida = null;
     
-
     return new Promise(resolve => {
 
         con.query("SELECT * FROM partides WHERE partides_id =" + idPartida, function (err, result, fields) {
@@ -99,7 +98,6 @@ function getPartidaID(idPartida) {
 // Busca si eixe usuari ja esta en una partida
 function getPartidaUsuarisBYUsuariPartida(usuari, partida) {
     var partides_users = null;
-    
 
     return new Promise(resolve => {
 

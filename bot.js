@@ -36,8 +36,11 @@ var user = ["asd"];
 var usuariActual;
 // Final variables globals
 
+
+
 //***------START-----------------------
 bot.command('start', ctx => {
+
 
     usuariService.getUserByID(ctx.from.id).then(data => {
         if (data === null) { // No te cap nivell
@@ -70,34 +73,22 @@ bot.command('start', ctx => {
 /nivell (Canviar el teu nivell)\n\
 /ajuda (Llistat d'ajuda)\n\
 /parar (Finalitzar el bot)\n\
- /botones");
+");
             }
         }
     });
 
 
-//   bot.command(['botones'],(ctx) => ctx.telegram.sendMessage(
-//                    ctx.from.id,
-//                    'Ací tens totes les partides disponibles:',
-//                    inlineMessageRatingKeyboard)
-//        );
-//
-//        const inlineMessageRatingKeyboard = Markup.inlineKeyboard([
-//            Markup.callbackButton('Piles', 'Ppiles'),
-//            Markup.callbackButton('Oliva', 'Ooliva')
-//        ]).extra();
-//
-//        bot.action('Ppiles', (ctx) => ctx.editMessageText('🎉 Awesome! 🎉'))
-//        bot.action('Ooliva', (ctx) => ctx.editMessageText('okey'))
-
-
+    /* ===== NIVELLS =====  */
     bot.command(['nivell'], ctx => {
         ctx.reply("Quin nivell tens " + ctx.message.from.first_name + "? ( /avancat /intermig /principiant ) ");
     });
+
+
     bot.command(['principiant', 'intermig', 'avancat'], ctx => {
         usuariService.setLevelByID(ctx.from.id, ctx.message.text);
-        // EMPALMAR LAVARIABLE QUE ELL ENS ENVIA
-        usuariActual.users_levels_desc = ctx.message.text;
+//        // EMPALMAR LAVARIABLE QUE ELL ENS ENVIA
+//        usuariActual.users_levels_desc = ctx.message.text;
         ctx.reply("Nivell modificat correctament. Que dessitges fer ara?\n\
 \n\
 /crearPartida (Crear una nova partida)\n\
@@ -106,22 +97,29 @@ bot.command('start', ctx => {
 /ajuda (Llistat d'ajuda)\n\
 /parar (Finalitzar el bot)");
     });
+
+    /* ===== Crear Partida =====  */
     bot.command('crearPartida', ctx => { //Crear una nova partida
         console.log("Vaig a crear una partida");
         usuariService.crearPartida(ctx);
     });
+
+    /* ===== Crear Pista =====  */
     bot.command('crearPista', ctx => { //Crear una nova partida
         console.log("Vaig a crear una pista");
         ctx.reply(" Inserte la descripcion de la pista: (/descripcionPista pista negra Piles)");
         console.log(ctx.message.text);
     });
-    bot.command(['descripcionPista'], ctx => {
-    });
-    /**--------------BUSCAR PARTIDES--------------------**/
+
+
+    /* ===== Buscar Partida =====  */
     bot.command(['buscarPartida'], ctx => {
+
         ctx.reply("Com dessitges buscar la partida:\n\
 Per un dia: /partida dia-mes (Ex: /partida 13-10)\n\
 Totes les partides: /totesPartides");
+
+        /* ===== Buscar per dia i hora =====  */
         bot.command(['partida'], ctx => {
             console.log("PAAAAAAAAARTIDA" + ctx.message.text);
             var fechaDividida = ctx.message.text.split(" ", 3);
@@ -130,19 +128,12 @@ Totes les partides: /totesPartides");
             console.log("dia: " + diaymes[0] + "mes: " + diaymes[1]);
         });
 
-
-
-        //  bot.command('totesPartides', ({ reply }) => {
-
+        /* ===== Buscar totes les partides =====  */
         bot.command(['totesPartides'], ctx => {
             usuariService.getUserByID(ctx.from.id).then(data => {
-                
+
                 //Si ho poses recorda comprovar que la data[0] no siga null per que aixo voldra dir que eixe usuari no apretat el starte i  ademes comprova tambe que el data[0].level_id es diferent que 0 si nos voldra dir que eixe usuari esta donat d'alta pero no a selecionat el nivell
-                
-                
-                
-                
-                // usuariActual.users_levels_id  === getLeveldelUsuari();
+
                 partidesService.getPartides(data[0].users_levels_id).then(data => {
                     if (data.length === 0) { // No tens cap partida amb el teu nivell 
                         ctx.reply("No he trobat cap partida per poder jugar, si vols pots crear una partida:  /crearPartida");
@@ -154,15 +145,11 @@ Totes les partides: /totesPartides");
                             var dataArray = [];
                             lista.push(Markup.callbackButton(data[i].partides_desc + " - " + data[i].partides_num_jugadors + " jugadors \n", "partida-" + data[i].partides_id)); // add at the end 
                             myData.push(lista);
-
-//                        bot.action("partida-" + data[i].partides_id, (ctx) =>
-//                                        partidaSeleccionada(ctx, data));
                         }
-//                        
+
                         ctx.telegram.sendMessage(
                                 ctx.from.id,
                                 'Ací tens totes les partides disponibles:',
-//                                Markup.inlineKeyboard(['Coke', 'Pepsi'])
                                 Markup.inlineKeyboard(
                                         myData
                                         ).extra()
@@ -171,83 +158,20 @@ Totes les partides: /totesPartides");
                 });
             });
         });
-
-
-//      
-
-//        bot.command(['totesPartides'], ctx => {
-//            ctx.reply("Ara et busque totes les partides");
-//
-//            partidesService.getPartides().then(data => {
-//
-//
-//                var descripcio;
-//                var numJugadors;
-//
-//
-//                for (var i = 0; i < data.length; i++) {
-////                    console.log("data", data[i]);
-//                    descripcio = data[i].partides_desc;
-//                    numJugadors = data[i].partides_num_jugadors;
-//
-//
-//                }
-//                bot.action('Ppiles', (ctx) => ctx.editMessageText('🎉 Awesome! 🎉'))
-//                bot.action('Ooliva', (ctx) => ctx.editMessageText('okey'))
-//
-//            });
-//
-//            ctx.telegram.sendMessage(
-//                    ctx.from.id,
-//                    'Ací tens totes les partides disponibles:',
-//                    inlineMessageRatingKeyboard);
-//
-//            const inlineMessageRatingKeyboard = Markup.inlineKeyboard([
-//                Markup.callbackButton('Piles', 'Ppiles'),
-//                Markup.callbackButton('Oliva', 'Ooliva')
-//            ]).extra();
-//
-//        });
-
-        //BOTOOONS QUE FUNCIONEN BEEEEE
-
-//        bot.command(['totesPartides'], (ctx) => ctx.telegram.sendMessage(
-//                    ctx.from.id,
-//                    'Ací tens totes les partides disponibles:',
-//                    inlineMessageRatingKeyboard
-//
-//
-//                    ));
-
-//        const inlineMessageRatingKeyboard = Markup.inlineKeyboard([
-//            Markup.callbackButton('Piles', 'Ppiles'),
-//            Markup.callbackButton('Oliva', 'Ooliva')
-//        ]).extra();
-
-
-
-
-
-
-
-
-//        bot.action('Ppiles', (ctx) => ctx.editMessageText('🎉 Awesome! 🎉'));
-//        bot.action('Ooliva', (ctx) => ctx.editMessageText('okey'));
-
-        // FINAAAAAAL BOTOOONS QUE FUNCIONEN BEEEEE
-
-
     }); // FINAL BUSCAR PARTIDES
 
 
 
 
     bot.command('ajuda', ctx => {
-        var ex = ctx.message.from.first_name;
-//        logMsg(ctx);
-//        logOutMsg(ctx, helpMsg);
-        ctx.reply("Yee ninot ", ctx.message.from.first_name);
-        ctx.reply("Yee ninot +" + usuariActual.users_levels_desc);
+  
+        ctx.replyWithHTML("<b>Ajuda<b> \n\
+/crearPartida (Crear una nova partida)\n\
+/buscarPartida (Buscar una nova partida)\n\
+/nivell (Canviar el teu nivell)\n\
+/parar (Finalitzar el bot)\n\
+");
+
     });
 }); //***------Final START-----------------------
 
@@ -258,7 +182,6 @@ bot.action(/partida+/, (ctx, next) => {
 });
 
 function partidaSeleccionada(ctx, data) {
-
     var codiPartida = data.split("-", 3);
     console.log("EL codi de la partida" + codiPartida);
 
@@ -271,21 +194,31 @@ function partidaSeleccionada(ctx, data) {
         var numJugadors = data.partides_num_jugadors;
         var fechaPartida = data.partides_data;
 
-        ctx.editMessageText('Partida seleccionada! 🎉 \n\
+
+
+        // Comprove que l'usuari no existeix en eixa partida
+        // partidesUsuaris tindre que fer un select amb l'id del usuari i la partida
+        partidesService.getPartidaUsuarisBYUsuariPartida(ctx.from.id, codiPartida[1]).then(data => {
+            console.log("data lengtthhhh", data);
+//            if (data.length === 0) { // No estas en eixa partida aixi que vaig afegirte
+//                partidesService.updatePartida(codiPartida[1], numJugadors); //Actualitza en la taula partida i suma un jugador         
+//                partidesService.afegirPartidesUsers(codiPartida[1], ctx.from.id); //Afegisc l'usuari i la partida en la taula usuarisPartides
+//            } else {
+//                ctx.reply("No el pots donar d'alta en  " + descripcionPartida + " ja que ja estas donat d'alta anteriorment");
+//            }
+            if (data === null) { // No estas en eixa partida aixi que vaig afegirte
+                partidesService.updatePartida(codiPartida[1], numJugadors); //Actualitza en la taula partida i suma un jugador         
+                partidesService.afegirPartidesUsers(codiPartida[1], ctx.from.id); //Afegisc l'usuari i la partida en la taula usuarisPartides
+                ctx.editMessageText('Partida seleccionada! 🎉 \n\
             \n\
             Descripció de la partida: ' + descripcionPartida + "\n\
             Nº Usuaris: " + numJugadors + "\n\
             Hora: " + fechaPartida);
 
-        // Comprove que l'usuari no existeix en eixa partida
-        // partidesUsuaris tindre que fer un select amb l'id del usuari i la partida
-        partidesService.getPartidaUsuarisBYUsuariPartida(ctx.from.id, codiPartida[1]).then(data => {
-            if (data.length === 0) { // No estas en eixa partida aixi que vaig afegirte
-                partidesService.updatePartida(codiPartida[1], numJugadors); //Actualitza en la taula partida i suma un jugador         
-                partidesService.afegirPartidesUsers(codiPartida[1], ctx.from.id); //Afegisc l'usuari i la partida en la taula usuarisPartides
             } else {
-                ctx.reply("No el pots donar d'alta en  " + descripcionPartida + " ja que ja estas donat d'alta anteriorment");
+                ctx.editMessageText("No el pots donar d'alta en la partida " + descripcionPartida + ", ja que t'has dona d'alta anteriorment.");
             }
+
         });
     });
 
