@@ -66,25 +66,17 @@ function getUserByID(users_id) {
 //                return user;
             });
             if (user === null) {
-                console.log("No estic");
                 resolve(user);
-
-
             } else {
-                console.log("Si que  estic ");
+                // A este usuari que si que ha trobat ens dira que te el nivell XXXX
+                
                 resolve(user);
+                
+                
+             
             }
-
-
-
-
-
-
         });
     });
-
-
-
 }
 
 function saveUser(usuari) {
@@ -99,29 +91,29 @@ function saveUser(usuari) {
 }
 // Aquest metode mes endavant tindra que ferse amb un select 
 
-function getLevelbyId(idNivell) {
-
-    switch (idNivell) {
-        case "0":
-            return "No te cap nivell";
-            break;
-        case "1":
-            return "Avançat";
-            break;
-        case "2":
-            return "Intermig";
-            break;
-        case "3":
-            return "Principant";
-            break;
-    }
-
-    var sql = "UPDATE users SET users_levels_id='" + nivell + "' WHERE users_id = '" + users_id + "'";
-    con.query(sql, function (err, result) {
-        if (err)
-            throw err;
-    });
-}
+//function getLevelbyId(idNivell) {
+//
+//    switch (idNivell) {
+//        case "0":
+//            return "No te cap nivell";
+//            break;
+//        case "1":
+//            return "Avançat";
+//            break;
+//        case "2":
+//            return "Intermig";
+//            break;
+//        case "3":
+//            return "Principant";
+//            break;
+//    }
+//
+//    var sql = "UPDATE users SET users_levels_id='" + nivell + "' WHERE users_id = '" + users_id + "'";
+//    con.query(sql, function (err, result) {
+//        if (err)
+//            throw err;
+//    });
+//}
 
 
 
@@ -146,6 +138,14 @@ function setLevelByID(users_id, missatge) {
             throw err;
     });
 }
+
+
+
+//function getLevelByUserID(users_id) {
+
+
+
+
 
 function crearPartida(ctx) {
     console.log("En crear partida");
@@ -245,6 +245,10 @@ function assertCounter(uid, id) {
     }
 }
 
+// Crear un metode que ens retorne la ID del nivell + la descripcio es adir un objecte nivell.descripcio nivell.id  ['nuvell',nivell]
+
+
+
 function setCounter(uid, id, val) {
     assertCounter(uid, id);
     users[uid].counter[id].value = val;
@@ -271,7 +275,7 @@ module.exports = {
     resolveAfter2Seconds,
     setLevelByID,
     crearPartida,
-    getLevelbyId,
+//    getLevelbyId,
 //    getMetaData,
 //    setCounter,
 //    getCounter,

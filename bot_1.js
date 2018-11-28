@@ -54,13 +54,13 @@ bot.command('start', ctx => {
                     "users_levels_desc": 'No te nivell'
                 }];
 //            usuariActual = dadesUserActual[0];
-            ctx.reply("Benvingut " + ctx.message.from.first_name + " a GeoPadel. Quin nivell tens? ( /avancat /intermig /principiant ) ");
+            ctx.reply("Benvingut " + usuariActual.users_first_name + " a GeoPadel. Quin nivell tens? ( /avancat /intermig /principiant ) ");
         } else { // Per obligar l'usuari que es logeje
 
             usuariActual = data[0];
             //Oblga que no puga veure el menu si no pulsa l'inici
             if (usuariActual.users_levels_id === 0) {
-                ctx.reply("Benvingut " + ctx.message.from.first_name + " a GeoPadel. Quin nivell tens? ( /avancat /intermig /principiant ) ");
+                ctx.reply("Benvingut " + usuariActual.users_first_name + " a GeoPadel. Quin nivell tens? ( /avancat /intermig /principiant ) ");
             } else {
                 var nom = ctx.message.from.first_name;
                 console.log("Si que he trobat al usuari: ", nom);
@@ -74,8 +74,12 @@ bot.command('start', ctx => {
             }
         }
     });
-
-
+    
+    
+    
+    
+    
+    
 //   bot.command(['botones'],(ctx) => ctx.telegram.sendMessage(
 //                    ctx.from.id,
 //                    'Ací tens totes les partides disponibles:',
@@ -92,7 +96,7 @@ bot.command('start', ctx => {
 
 
     bot.command(['nivell'], ctx => {
-        ctx.reply("Quin nivell tens " + ctx.message.from.first_name + "? ( /avancat /intermig /principiant ) ");
+        ctx.reply("Quin nivell tens "+ usuariActual.users_first_name + "? ( /avancat /intermig /principiant ) ");
     });
     bot.command(['principiant', 'intermig', 'avancat'], ctx => {
         usuariService.setLevelByID(ctx.from.id, ctx.message.text);
@@ -129,46 +133,34 @@ Totes les partides: /totesPartides");
             ctx.reply("Has elegit el dia: " + diaymes[0] + " del mes: " + diaymes[1]);
             console.log("dia: " + diaymes[0] + "mes: " + diaymes[1]);
         });
+        bot.command('totesPartides', ({ reply }) => {
 
+            partidesService.getPartides(usuariActual.users_levels_id).then(data => {
+                if (data.length === 0) { // No tens cap partida amb el teu nivell 
+                    ctx.reply("No he trobat cap partida per poder jugar, si vols pots crear una partida:  /crearPartida");
+                } else {
 
-
-        //  bot.command('totesPartides', ({ reply }) => {
-
-        bot.command(['totesPartides'], ctx => {
-            usuariService.getUserByID(ctx.from.id).then(data => {
-                
-                //Si ho poses recorda comprovar que la data[0] no siga null per que aixo voldra dir que eixe usuari no apretat el starte i  ademes comprova tambe que el data[0].level_id es diferent que 0 si nos voldra dir que eixe usuari esta donat d'alta pero no a selecionat el nivell
-                
-                
-                
-                
-                // usuariActual.users_levels_id  === getLeveldelUsuari();
-                partidesService.getPartides(data[0].users_levels_id).then(data => {
-                    if (data.length === 0) { // No tens cap partida amb el teu nivell 
-                        ctx.reply("No he trobat cap partida per poder jugar, si vols pots crear una partida:  /crearPartida");
-                    } else {
-
-                        var myData = [];
-                        for (var i = 0; i < data.length; i++) {
-                            var lista = [];
-                            var dataArray = [];
-                            lista.push(Markup.callbackButton(data[i].partides_desc + " - " + data[i].partides_num_jugadors + " jugadors \n", "partida-" + data[i].partides_id)); // add at the end 
-                            myData.push(lista);
+                    var myData = [];
+                    for (var i = 0; i < data.length; i++) {
+                        var lista = [];
+                        var dataArray = [];
+                        lista.push(Markup.callbackButton(data[i].partides_desc + " - " + data[i].partides_num_jugadors + " jugadors \n", "partida-" + data[i].partides_id)); // add at the end 
+                        myData.push(lista);
 
 //                        bot.action("partida-" + data[i].partides_id, (ctx) =>
 //                                        partidaSeleccionada(ctx, data));
-                        }
-//                        
-                        ctx.telegram.sendMessage(
-                                ctx.from.id,
-                                'Ací tens totes les partides disponibles:',
-//                                Markup.inlineKeyboard(['Coke', 'Pepsi'])
-                                Markup.inlineKeyboard(
-                                        myData
-                                        ).extra()
-                                );
                     }
-                });
+//                        
+
+                    ctx.telegram.sendMessage(
+                            ctx.from.id,
+                            'Ací tens totes les partides disponibles:',
+//                                Markup.inlineKeyboard(['Coke', 'Pepsi'])
+                            Markup.inlineKeyboard(
+                                    myData
+                                    ).extra()
+                            );
+                }
             });
         });
 
@@ -243,10 +235,11 @@ Totes les partides: /totesPartides");
 
 
     bot.command('ajuda', ctx => {
-        var ex = ctx.message.from.first_name;
+        console.log("Tew", usuariActual);
+        var ex = usuariActual.users_first_name;
 //        logMsg(ctx);
 //        logOutMsg(ctx, helpMsg);
-        ctx.reply("Yee ninot ", ctx.message.from.first_name);
+        ctx.reply("Yee ninot ", usuariActual.users_first_name);
         ctx.reply("Yee ninot +" + usuariActual.users_levels_desc);
     });
 }); //***------Final START-----------------------
@@ -288,11 +281,11 @@ function partidaSeleccionada(ctx, data) {
             }
         });
     });
-
-
-
-
-
+    
+    
+    
+    
+    
 }
 
 
@@ -354,50 +347,3 @@ bot.startPolling();
 module.exports = {
 
 };
-
-
-
-
-
-//
-//function updateUsuariActual(ctx) {
-//    usuariService.getUserByID(ctx.from.id).then(data => {
-//        usuariActual = data[0];
-//    });
-
-
-
-
-
-
-
-
-
-
-
-// Cada vegada que necesites saber el id del nivell del usuari hi ha que copiar aquest codi
-
-/*
- usuariService.getUserByID(ctx.from.id).then(data => {
- if (data === null) { // No te cap nivell
- console.log("No he trobat a cap usuari, vaig a insertar-lo");
- //Insert 
- usuariService.saveUser(ctx.message);
- usuariActual = [{
- "users_id": ctx.message.from.id,
- "users_first_name": ctx.message.from.first_name,
- "users_last_name": ctx.message.from.last_name,
- "users_username": ctx.message.from.username,
- "users_levels_id": 0,
- "users_levels_desc": 'No te nivell'
- }];
- ctx.reply("Benvingut " + ctx.message.from.first_name + " a GeoPadel. Quin nivell tens? ( /avancat /intermig /principiant ) ");
- } else { // Per obligar l'usuari que es logeje
- usuariActual = data[0];
- }
- });
- 
- */
-
-
-
