@@ -69,8 +69,7 @@ bot.command('start', ctx => {
 /buscarPartida (Buscar una nova partida)\n\
 /nivell (Canviar el teu nivell)\n\
 /ajuda (Llistat d'ajuda)\n\
-/parar (Finalitzar el bot)\n\
- /botones");
+/parar (Finalitzar el bot)");
             }
         }
     });
@@ -317,31 +316,10 @@ bot.command('about', ctx => {
     logOutMsg(ctx, aboutMsg);
     ctx.reply(aboutMsg);
 });
-function logMsg(ctx) {
-    var from = userString(ctx);
-    console.log('<', ctx.message.text, from)
-}
-
-function logOutMsg(ctx, text) {
-    console.log('>', {
-        id: ctx.chat.id
-    }, text);
-}
 
 
-bot.command('inline', (ctx) => {
-    return ctx.reply('<b>Coke</b> or <i>Pepsi?</i>', Extra.HTML().markup((m) =>
-        m.inlineKeyboard([
-            m.callbackButton('Cokejjjjjjjj', 'Coke'),
-            m.callbackButton('Pepkkkkkkkkkkkkksi', 'Pepsi')
-        ])))
-})
 
-bot.command('simple', (ctx) => {
-    return ctx.replyWithHTML('<b>Cokeeeeeeeeeeeeeeee</b> or <i>Pepsieeeeeeeeeeeeeee?</i>', Extra.markup(
-            Markup.keyboard(['Coiiiiiiiiiiiiiiiiscfuygfgjhjghjhgfjghfjjjjjjjjjjjjjjdajjjjiiiiiiiiike', 'Pehhhhhhhhhhhhhhhgggggggggggggggggggggggggghhhhhhhhhpsi', 'sadasdadsdasdsa', 'adsdsaads'])
-            ))
-})
+
 
 bot.startPolling();
 module.exports = {

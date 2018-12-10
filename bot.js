@@ -116,16 +116,21 @@ bot.command('start', ctx => {
     bot.command(['buscarPartida'], ctx => {
 
         ctx.reply("Com dessitges buscar la partida:\n\
-Per un dia: /partida dia-mes (Ex: /partida 13-10)\n\
+Per un dia: /partida any-mes-dia (Ex: /partida 2018-10-13)\n\
 Totes les partides: /totesPartides");
 
         /* ===== Buscar per dia i hora =====  */
         bot.command(['partida'], ctx => {
             console.log("PAAAAAAAAARTIDA" + ctx.message.text);
-            var fechaDividida = ctx.message.text.split(" ", 3);
-            var diaymes = fechaDividida[1].split("-", 3);
-            ctx.reply("Has elegit el dia: " + diaymes[0] + " del mes: " + diaymes[1]);
-            console.log("dia: " + diaymes[0] + "mes: " + diaymes[1]);
+//            var fechaDividida = ctx.message.text.split(" ", 3);
+//            var diaymes = fechaDividida[1].split("-", 3);
+//            ctx.reply("Has elegit el dia: " + diaymes[0] + " del mes: " + diaymes[1]);
+//            console.log("dia: " + diaymes[0] + "mes: " + diaymes[1]);
+
+            var fecha = new Date(ctx.message.text);
+            
+            console.log("FECHA", fecha.getDate() , fecha.getMonth()+1 , fecha.getFullYear());
+
         });
 
         /* ===== Buscar totes les partides =====  */
@@ -164,8 +169,8 @@ Totes les partides: /totesPartides");
 
 
     bot.command('ajuda', ctx => {
-  
-        ctx.replyWithHTML("<b>Ajuda<b> \n\
+
+        ctx.reply("Ajuda \n\
 /crearPartida (Crear una nova partida)\n\
 /buscarPartida (Buscar una nova partida)\n\
 /nivell (Canviar el teu nivell)\n\
@@ -195,28 +200,39 @@ function partidaSeleccionada(ctx, data) {
         var fechaPartida = data.partides_data;
 
 
+        var nuevaFecha = new Date(data.partides_data);
+        var diaComplet = "" + nuevaFecha.getDate() + "-" + (nuevaFecha.getMonth() + 1) + "-" + nuevaFecha.getFullYear();
+
+        var horaCompleta = "" + nuevaFecha.getHours() + ":" + nuevaFecha.getMinutes() + "";
+
+
+
+
 
         // Comprove que l'usuari no existeix en eixa partida
         // partidesUsuaris tindre que fer un select amb l'id del usuari i la partida
         partidesService.getPartidaUsuarisBYUsuariPartida(ctx.from.id, codiPartida[1]).then(data => {
-            console.log("data lengtthhhh", data);
-//            if (data.length === 0) { // No estas en eixa partida aixi que vaig afegirte
-//                partidesService.updatePartida(codiPartida[1], numJugadors); //Actualitza en la taula partida i suma un jugador         
-//                partidesService.afegirPartidesUsers(codiPartida[1], ctx.from.id); //Afegisc l'usuari i la partida en la taula usuarisPartides
-//            } else {
-//                ctx.reply("No el pots donar d'alta en  " + descripcionPartida + " ja que ja estas donat d'alta anteriorment");
-//            }
+
             if (data === null) { // No estas en eixa partida aixi que vaig afegirte
                 partidesService.updatePartida(codiPartida[1], numJugadors); //Actualitza en la taula partida i suma un jugador         
                 partidesService.afegirPartidesUsers(codiPartida[1], ctx.from.id); //Afegisc l'usuari i la partida en la taula usuarisPartides
                 ctx.editMessageText('Partida seleccionada! 🎉 \n\
             \n\
-            Descripció de la partida: ' + descripcionPartida + "\n\
-            Nº Usuaris: " + numJugadors + "\n\
-            Hora: " + fechaPartida);
+Descripció de la partida: ' + descripcionPartida + "\n\
+Nº Usuaris: " + numJugadors + "\n\
+Dia: " + diaComplet + "\n\
+Hora: " + horaCompleta);
+
+
 
             } else {
                 ctx.editMessageText("No el pots donar d'alta en la partida " + descripcionPartida + ", ja que t'has dona d'alta anteriorment.");
+                ctx.reply("Que dessitges fer ara?\n\
+/crearPartida (Crear una nova partida)\n\
+/buscarPartida (Buscar una nova partida)\n\
+/nivell (Canviar el teu nivell)\n\
+/ajuda (Llistat d'ajuda)\n\
+/parar (Finalitzar el bot)");
             }
 
         });
