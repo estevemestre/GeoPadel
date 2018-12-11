@@ -90,7 +90,39 @@ bot.command('start', ctx => {
     /* ===== Crear Partida =====  */
     bot.command('crearPartida', ctx => { //Crear una nova partida
         console.log("Vaig a crear una partida");
-        usuariService.crearPartida(ctx);
+         ctx.reply("Vas a crear una nova partida, per a fer-ho has de fer-ho de la següent manera:\n\
+ \n\
+ /novaPartida *Descripcio partida *data i hora\n\
+\n\
+Exemple:\n\
+\n\
+/novaPartida *Partida Gandia *2018-12-5 17:30");
+        
+         
+          bot.command(['novaPartida'], ctx => {
+              usuariService.getUserByID(ctx.from.id).then(data => {
+                console.log("dins de nova partida i l'usuari ha dit:", ctx.message.text); 
+                
+               
+                var nivellUsuari = data[0].users_levels_id;
+                
+                var contestacioUsuari= ctx.message.text;
+                var tallarContestacio = contestacioUsuari.split("*");
+                
+                var descripcioPartida = tallarContestacio[1];
+                var dataPartida = tallarContestacio[2];
+                
+                console.log("Descripcio partida: ", descripcioPartida, " data: " , dataPartida);
+                
+                
+                partidesService.crearPartida(descripcioPartida, dataPartida, nivellUsuari).then(data => {
+                    
+                });
+                
+            });
+             
+          });
+
     });
 
     /* ===== Crear Pista =====  */
