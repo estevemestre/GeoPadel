@@ -40,8 +40,6 @@ var usuariActual;
 
 //***------START-----------------------
 bot.command('start', ctx => {
-
-
     usuariService.getUserByID(ctx.from.id).then(data => {
         if (data === null) { // No te cap nivell
             console.log("No he trobat a cap usuari, vaig a insertar-lo");
@@ -127,9 +125,38 @@ Totes les partides: /totesPartides");
 //            ctx.reply("Has elegit el dia: " + diaymes[0] + " del mes: " + diaymes[1]);
 //            console.log("dia: " + diaymes[0] + "mes: " + diaymes[1]);
 
-            var fecha = new Date(ctx.message.text);
-            
-            console.log("FECHA", fecha.getDate() , fecha.getMonth()+1 , fecha.getFullYear());
+            var fechaCompleta = ctx.message.text;
+
+//            console.log("FECHA", fechaCompleta.getDate(), fechaCompleta.getMonth() + 1, fechaCompleta.getFullYear());
+
+            usuariService.getUserByID(ctx.from.id).then(data => {
+                partidesService.getPartidesData(data[0].users_levels_id, fechaCompleta).then(data => {
+
+                    if (data.length === 0) { // No tens cap partida amb el teu nivell 
+                        ctx.reply("No he trobat cap partida per poder jugar, si vols pots crear una partida:  /crearPartida");
+                    } else {
+                        var myData = [];
+                        for (var i = 0; i < data.length; i++) {
+                            var lista = [];
+                            var dataArray = [];
+                            lista.push(Markup.callbackButton(data[i].partides_desc + " - " + data[i].partides_num_jugadors + " jugadors \n", "partida-" + data[i].partides_id)); // add at the end 
+                            myData.push(lista);
+                        }
+
+                        ctx.telegram.sendMessage(
+                                ctx.from.id,
+                                'Ací tens totes les partides disponibles:',
+                                Markup.inlineKeyboard(
+                                        myData
+                                        ).extra()
+                                );
+                    }
+
+                });
+            });
+
+
+
 
         });
 
@@ -186,6 +213,8 @@ bot.action(/partida+/, (ctx, next) => {
     partidaSeleccionada(ctx, ctx.callbackQuery.data);
 });
 
+
+
 function partidaSeleccionada(ctx, data) {
     var codiPartida = data.split("-", 3);
     console.log("EL codi de la partida" + codiPartida);
@@ -201,6 +230,7 @@ function partidaSeleccionada(ctx, data) {
 
 
         var nuevaFecha = new Date(data.partides_data);
+
         var diaComplet = "" + nuevaFecha.getDate() + "-" + (nuevaFecha.getMonth() + 1) + "-" + nuevaFecha.getFullYear();
 
         var horaCompleta = "" + nuevaFecha.getHours() + ":" + nuevaFecha.getMinutes() + "";
