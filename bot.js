@@ -12,8 +12,6 @@ const partidesService = require('./services/partidesService');
 
 
 
-
-
 const config = require('./config');
 const bot = new Telegraf(config.botToken);
 const helpMsg = `Ajuda:
@@ -23,14 +21,7 @@ const helpMsg = `Ajuda:
 /partides - Numero de partides creades que hi han
 /crear - Crear una nova partida
 /parar - Finalitzar el bot`;
-const inputErrMsg = `💥 BOOM... 🔩☠🔧🔨⚡️
-Hm, that wasn't supposed to happen. You didn't input invalid characters, did you?
-The usage for this command is \"/set x\", where x is a number.
-At the moment, I can only count integers, if you want to add your own number system, please feel free to do so. Just click here: /about `;
-const incNMsg = `To use multiple counters, simply put the number of the counter you want to increase directly after the command like so:
-/inc1 <- this will increment counter 1
-/inc  <- this will increment the default counter (0)
-This does also work with other commands like /dec1 /reset1 /set1 /get1`;
+
 const aboutMsg = "Este bot ha sigut creat per @onademar. Espere que siga de la vostra utilitat.";
 var user = ["asd"];
 var usuariActual;
@@ -119,15 +110,7 @@ Totes les partides: /totesPartides");
 
         /* ===== Buscar per dia i hora =====  */
         bot.command(['partida'], ctx => {
-            console.log("PAAAAAAAAARTIDA" + ctx.message.text);
-//            var fechaDividida = ctx.message.text.split(" ", 3);
-//            var diaymes = fechaDividida[1].split("-", 3);
-//            ctx.reply("Has elegit el dia: " + diaymes[0] + " del mes: " + diaymes[1]);
-//            console.log("dia: " + diaymes[0] + "mes: " + diaymes[1]);
-
             var fechaCompleta = ctx.message.text;
-
-//            console.log("FECHA", fechaCompleta.getDate(), fechaCompleta.getMonth() + 1, fechaCompleta.getFullYear());
 
             usuariService.getUserByID(ctx.from.id).then(data => {
                 partidesService.getPartidesData(data[0].users_levels_id, fechaCompleta).then(data => {
@@ -209,7 +192,6 @@ Totes les partides: /totesPartides");
 
 
 bot.action(/partida+/, (ctx, next) => {
-//    return ctx.reply(ctx.callbackQuery.data);
     partidaSeleccionada(ctx, ctx.callbackQuery.data);
 });
 
@@ -217,13 +199,9 @@ bot.action(/partida+/, (ctx, next) => {
 
 function partidaSeleccionada(ctx, data) {
     var codiPartida = data.split("-", 3);
-    console.log("EL codi de la partida" + codiPartida);
-
-
 
 
     partidesService.getPartidaID(codiPartida[1]).then(data => {
-        console.log("DATA GENT PARTIDA ID", data);
         var descripcionPartida = data.partides_desc;
         var numJugadors = data.partides_num_jugadors;
         var fechaPartida = data.partides_data;
@@ -235,8 +213,6 @@ function partidaSeleccionada(ctx, data) {
         var diaComplet = "" + nuevaFecha.getDate() + "-" + (nuevaFecha.getMonth() + 1) + "-" + nuevaFecha.getFullYear();
         var horaCompleta = "" + nuevaFecha.getHours() + ":" + nuevaFecha.getMinutes() + ":" + nuevaFecha.getSeconds();
 
-        var fechaCompletaConsulta = "'"+ diaComplet + " " + horaCompleta + "'";
-        console.log(fechaCompletaConsulta);
 
 
 
@@ -255,8 +231,6 @@ Nº Usuaris: " + actualitzarNumusers + "\n\
 Dia: " + diaComplet + "\n\
 Hora: " + horaCompleta);
 
-
-
             } else {
                 ctx.editMessageText("No el pots donar d'alta en la partida " + descripcionPartida + ", ja que t'has dona d'alta anteriorment.");
                 ctx.reply("Que dessitges fer ara?\n\
@@ -269,116 +243,29 @@ Hora: " + horaCompleta);
 
         });
     });
-
-
-
-
-
 }
 
 
 
 
 
+//bot.command('parar', ctx => { // Finalitzar el bot
+//    var missatgeParar = "Fins prompte, " + ctx.chat.first_name + ".";
+//    logOutMsg(ctx, missatgeParar);
+//    ctx.reply(missatgeParar);
+//});
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-bot.command('parar', ctx => { // Finalitzar el bot
+//bot.command('about', ctx => {
 //    logMsg(ctx);
-    var missatgeParar = "Fins prompte, " + ctx.chat.first_name + ".";
-    logOutMsg(ctx, missatgeParar);
-    ctx.reply(missatgeParar);
-});
-bot.command('about', ctx => {
-    logMsg(ctx);
-    logOutMsg(ctx, aboutMsg);
-    ctx.reply(aboutMsg);
-});
-function logMsg(ctx) {
-    var from = userString(ctx);
-    console.log('<', ctx.message.text, from)
-}
-
-function logOutMsg(ctx, text) {
-    console.log('>', {
-        id: ctx.chat.id
-    }, text);
-}
+//    logOutMsg(ctx, aboutMsg);
+//    ctx.reply(aboutMsg);
+//});
 
 
-bot.command('inline', (ctx) => {
-    return ctx.reply('<b>Coke</b> or <i>Pepsi?</i>', Extra.HTML().markup((m) =>
-        m.inlineKeyboard([
-            m.callbackButton('Cokejjjjjjjj', 'Coke'),
-            m.callbackButton('Pepkkkkkkkkkkkkksi', 'Pepsi')
-        ])))
-})
 
-bot.command('simple', (ctx) => {
-    return ctx.replyWithHTML('<b>Cokeeeeeeeeeeeeeeee</b> or <i>Pepsieeeeeeeeeeeeeee?</i>', Extra.markup(
-            Markup.keyboard(['Coiiiiiiiiiiiiiiiiscfuygfgjhjghjhgfjghfjjjjjjjjjjjjjjdajjjjiiiiiiiiike', 'Pehhhhhhhhhhhhhhhgggggggggggggggggggggggggghhhhhhhhhpsi', 'sadasdadsdasdsa', 'adsdsaads'])
-            ))
-})
 
 bot.startPolling();
 module.exports = {
 
 };
-
-
-
-
-
-//
-//function updateUsuariActual(ctx) {
-//    usuariService.getUserByID(ctx.from.id).then(data => {
-//        usuariActual = data[0];
-//    });
-
-
-
-
-
-
-
-
-
-
-
-// Cada vegada que necesites saber el id del nivell del usuari hi ha que copiar aquest codi
-
-/*
- usuariService.getUserByID(ctx.from.id).then(data => {
- if (data === null) { // No te cap nivell
- console.log("No he trobat a cap usuari, vaig a insertar-lo");
- //Insert 
- usuariService.saveUser(ctx.message);
- usuariActual = [{
- "users_id": ctx.message.from.id,
- "users_first_name": ctx.message.from.first_name,
- "users_last_name": ctx.message.from.last_name,
- "users_username": ctx.message.from.username,
- "users_levels_id": 0,
- "users_levels_desc": 'No te nivell'
- }];
- ctx.reply("Benvingut " + ctx.message.from.first_name + " a GeoPadel. Quin nivell tens? ( /avancat /intermig /principiant ) ");
- } else { // Per obligar l'usuari que es logeje
- usuariActual = data[0];
- }
- });
- 
- */
-
-
-

@@ -82,7 +82,6 @@ function getPartidesData(idNivell, data) {
     var fechaCompletaInicio;
     var fechaCompletaFin;
 
-//    console.log("soy numero?", typeof any);
 
     if (Number.isNaN(any) && Number.isNaN(mes) && Number.isNaN(dia)) {
         console.log("No soy un numero :(");
@@ -95,13 +94,13 @@ function getPartidesData(idNivell, data) {
 //        console.log("Completita aqui", fechaCompletaInicio.getFullYear(), "-", fechaCompletaInicio.getMonth(), "-",
 //                fechaCompletaInicio.getDate(), " AHORA hora ", fechaCompletaInicio.getHours(), ":", fechaCompletaInicio.getMinutes());
 
-var consulta = "SELECT * FROM partides WHERE partides_num_jugadors < 4 AND partides_levels_id = " + idNivell + " AND partides_data BETWEEN '" +
-                    fechaCompletaInicio.getFullYear() + "-" + fechaCompletaInicio.getMonth() + "-" + fechaCompletaInicio.getDate() + " " +
-                    fechaCompletaInicio.getHours() + ":" + fechaCompletaInicio.getMinutes() + ":" + fechaCompletaInicio.getSeconds() + "' AND '" +
-                    fechaCompletaFin.getFullYear() + "-" + fechaCompletaFin.getMonth() + "-" + fechaCompletaFin.getDate() + " " +
-                    fechaCompletaFin.getHours() + ":" + fechaCompletaFin.getMinutes() + ":" + fechaCompletaFin.getSeconds()+ "'";
-                   
-console.log("CONSULTA", consulta);
+//var consulta = "SELECT * FROM partides WHERE partides_num_jugadors < 4 AND partides_levels_id = " + idNivell + " AND partides_data BETWEEN '" +
+//                    fechaCompletaInicio.getFullYear() + "-" + fechaCompletaInicio.getMonth() + "-" + fechaCompletaInicio.getDate() + " " +
+//                    fechaCompletaInicio.getHours() + ":" + fechaCompletaInicio.getMinutes() + ":" + fechaCompletaInicio.getSeconds() + "' AND '" +
+//                    fechaCompletaFin.getFullYear() + "-" + fechaCompletaFin.getMonth() + "-" + fechaCompletaFin.getDate() + " " +
+//                    fechaCompletaFin.getHours() + ":" + fechaCompletaFin.getMinutes() + ":" + fechaCompletaFin.getSeconds()+ "'";
+//                   
+//console.log("CONSULTA", consulta);
 
 
         return new Promise(resolve => {
@@ -137,15 +136,6 @@ console.log("CONSULTA", consulta);
 
 
     }
-
-
-//    SELECT * FROM partides 
-//WHERE partides_data BETWEEN  '2018-11-28 00:00:00' AND '2018-11-28 23:59:59' AND partides_levels_id =3 AND partides_num_jugadors < 4
-//    
-
-
-
-
 
 }
 
@@ -245,12 +235,7 @@ function savePartida(ctx) {
     console.log(ctx.message.text);
     var descripcion = ctx.message.text;
     var alias = ctx.from.username;
-//    var sql = "INSERT INTO users (users_id, users_first_name, users_last_name, users_username) VALUES ('" + usuari.from.id + "', '" + usuari.from.first_name + "', '" + usuari.from.last_name + "', '" + usuari.from.username + "')";
-//   
-//    con.query(sql, function (err, result) {
-//        if (err)
-//            throw err;
-//    });
+
 }
 
 function setLevelByID(users_id, missatge) {
@@ -286,64 +271,27 @@ function crearPartida(ctx) {
 
 
 
-function loadUsers() {
-    fs.readFile(usrFileName, (err, data) => {
-        if (err)
-            throw err;
-        users = JSON.parse(data);
-    });
-}
 
 
-function resolveAfter2Seconds(x) {
-    return new Promise(resolve => {
-        setTimeout(() => {
-            resolve(x);
-        }, 2000);
-    });
-}
 
 
-function registerUser(msg) {
-    var uid = msg.chat.id;
-    var usr = {enabled: true, data: {from: msg.from, chat: msg.chat}};
-    users[uid] = usr;
-    saveUsers();
-}
 
-//function getUser(uid) {
-//    return users[uid];
-//}
 
-function getUserList() {
-    return Object.keys(users);
-}
 
-function setMetaData(uid, key, val) {
-    users[uid].data[key] = val;
-    saveUsers();
-}
+
+
+
 
 
 
 module.exports = {
-//    loadUsers,
-//    registerUser,
-//    getUserList,
-//    setMetaData,
     getPartides,
     getPartidesData,
     savePartida,
-    resolveAfter2Seconds,
     setLevelByID,
     crearPartida,
     getPartidaID,
     updatePartida,
     afegirPartidesUsers,
     getPartidaUsuarisBYUsuariPartida
-//    getMetaData,
-//    setCounter,
-//    getCounter,
-//    getAllCounters,
-
 };
