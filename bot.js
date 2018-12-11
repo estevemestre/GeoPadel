@@ -228,14 +228,15 @@ function partidaSeleccionada(ctx, data) {
         var numJugadors = data.partides_num_jugadors;
         var fechaPartida = data.partides_data;
 
-
+       
+        
+        
         var nuevaFecha = new Date(data.partides_data);
-
         var diaComplet = "" + nuevaFecha.getDate() + "-" + (nuevaFecha.getMonth() + 1) + "-" + nuevaFecha.getFullYear();
+        var horaCompleta = "" + nuevaFecha.getHours() + ":" + nuevaFecha.getMinutes() + ":" + nuevaFecha.getSeconds();
 
-        var horaCompleta = "" + nuevaFecha.getHours() + ":" + nuevaFecha.getMinutes() + "";
-
-
+        var fechaCompletaConsulta = "'"+ diaComplet + " " + horaCompleta + "'";
+        console.log(fechaCompletaConsulta);
 
 
 
@@ -246,10 +247,11 @@ function partidaSeleccionada(ctx, data) {
             if (data === null) { // No estas en eixa partida aixi que vaig afegirte
                 partidesService.updatePartida(codiPartida[1], numJugadors); //Actualitza en la taula partida i suma un jugador         
                 partidesService.afegirPartidesUsers(codiPartida[1], ctx.from.id); //Afegisc l'usuari i la partida en la taula usuarisPartides
+               var actualitzarNumusers = numJugadors + 1;
                 ctx.editMessageText('Partida seleccionada! 🎉 \n\
             \n\
 Descripció de la partida: ' + descripcionPartida + "\n\
-Nº Usuaris: " + numJugadors + "\n\
+Nº Usuaris: " + actualitzarNumusers + "\n\
 Dia: " + diaComplet + "\n\
 Hora: " + horaCompleta);
 
