@@ -86,7 +86,7 @@ function getPartidesData(idNivell, data) {
     if (Number.isNaN(any) && Number.isNaN(mes) && Number.isNaN(dia)) {
         console.log("No soy un numero :(");
         return null;
-        
+
     } else {
         console.log("Si soy un numeeeero");
         fechaCompletaInicio = new Date(any, mes, dia, 0, 0, 0);
@@ -109,7 +109,7 @@ function getPartidesData(idNivell, data) {
                     fechaCompletaInicio.getFullYear() + "-" + fechaCompletaInicio.getMonth() + "-" + fechaCompletaInicio.getDate() + " " +
                     fechaCompletaInicio.getHours() + ":" + fechaCompletaInicio.getMinutes() + ":" + fechaCompletaInicio.getSeconds() + "' AND '" +
                     fechaCompletaFin.getFullYear() + "-" + fechaCompletaFin.getMonth() + "-" + fechaCompletaFin.getDate() + " " +
-                    fechaCompletaFin.getHours() + ":" + fechaCompletaFin.getMinutes() + ":" + fechaCompletaFin.getSeconds()+ "'",
+                    fechaCompletaFin.getHours() + ":" + fechaCompletaFin.getMinutes() + ":" + fechaCompletaFin.getSeconds() + "'",
                     function (err, result, fields) {
 
                         if (err)
@@ -259,8 +259,17 @@ function setLevelByID(users_id, missatge) {
     });
 }
 
-function crearPartida(ctx) {
+function crearPartida(descripcioPartida, dataPartida, nivellUsuari) {
     console.log("En crear partida");
+    console.log("Descripcio partida: ", descripcioPartida, " data: ", dataPartida, " nivell: ", nivellUsuari);
+    var sql = "INSERT INTO partides (partides_id, partides_desc, partides_num_jugadors, partides_pistes_id, partides_levels_id, partides_data) VALUES (NULL, '" + descripcioPartida + "' , '0', '1', '" + nivellUsuari + "', '" + dataPartida + "')";
+
+    con.query(sql, function (err, result) {
+        if (err)
+            throw err;
+    });
+
+
 //    ctx.reply("Descripció de ");
 //    var sql;
 //    con.query(sql, function (err, result) {

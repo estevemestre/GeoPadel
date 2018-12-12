@@ -7,6 +7,7 @@ const dataService = require('./dataService');
 // Service de l'usuari
 const usuariService = require('./services/usuariService');
 const partidesService = require('./services/partidesService');
+const partidesUsersService = require('./services/partidesUsersService');
 //Service Partides
 //const pistaService = require('./services/pistaService');
 
@@ -20,7 +21,7 @@ const helpMsg = `Ajuda:
 /setuser - Modificar informació del usuari
 /partides - Numero de partides creades que hi han
 /crear - Crear una nova partida
-/parar - Finalitzar el bot`;
+`;
 
 const aboutMsg = "Este bot ha sigut creat per @onademar. Espere que siga de la vostra utilitat.";
 var user = ["asd"];
@@ -60,8 +61,8 @@ bot.command('start', ctx => {
 /crearPartida (Crear una nova partida)\n\
 /buscarPartida (Buscar una nova partida)\n\
 /nivell (Canviar el teu nivell)\n\
+/lesMeuesPartides (Veure les partides on t'has unit)\n\
 /ajuda (Llistat d'ajuda)\n\
-/parar (Finalitzar el bot)\n\
 ");
             }
         }
@@ -83,8 +84,9 @@ bot.command('start', ctx => {
 /crearPartida (Crear una nova partida)\n\
 /buscarPartida (Buscar una nova partida)\n\
 /nivell (Canviar el teu nivell)\n\
+/lesMeuesPartides (Veure les partides on t'has unit)\n\
 /ajuda (Llistat d'ajuda)\n\
-/parar (Finalitzar el bot)");
+");
     });
 
     /* ===== Crear Partida =====  */
@@ -115,9 +117,15 @@ Exemple:\n\
                 console.log("Descripcio partida: ", descripcioPartida, " data: " , dataPartida);
                 
                 
-                partidesService.crearPartida(descripcioPartida, dataPartida, nivellUsuari).then(data => {
-                    
-                });
+                partidesService.crearPartida(descripcioPartida, dataPartida, nivellUsuari);
+                ctx.reply("Partida creada correctament! 🎉 \n\
+\n\Que dessitges fer ara?\n\
+/crearPartida (Crear una nova partida)\n\
+/buscarPartida (Buscar una nova partida)\n\
+/nivell (Canviar el teu nivell)\n\
+/lesMeuesPartides (Veure les partides on t'has unit)\n\
+/ajuda (Llistat d'ajuda)\n\
+");
                 
             });
              
@@ -216,10 +224,22 @@ Totes les partides: /totesPartides");
 /crearPartida (Crear una nova partida)\n\
 /buscarPartida (Buscar una nova partida)\n\
 /nivell (Canviar el teu nivell)\n\
-/parar (Finalitzar el bot)\n\
-");
+/lesMeuesPartides (Veure les partides on t'has unit)");
 
     });
+    
+    bot.command('lesMeuesPartides', ctx => {
+         usuariService.getUserByID(ctx.from.id).then(data => {
+             console.log(data);
+             
+         });
+
+    });
+    
+    
+    
+    
+    
 }); //***------Final START-----------------------
 
 
@@ -243,7 +263,7 @@ function partidaSeleccionada(ctx, data) {
         
         var nuevaFecha = new Date(data.partides_data);
         var diaComplet = "" + nuevaFecha.getDate() + "-" + (nuevaFecha.getMonth() + 1) + "-" + nuevaFecha.getFullYear();
-        var horaCompleta = "" + nuevaFecha.getHours() + ":" + nuevaFecha.getMinutes() + ":" + nuevaFecha.getSeconds();
+        var horaCompleta = "" + nuevaFecha.getHours() + ":" + nuevaFecha.getMinutes() + ":" + nuevaFecha.getSeconds() + "";
 
 
 
@@ -261,7 +281,15 @@ function partidaSeleccionada(ctx, data) {
 Descripció de la partida: ' + descripcionPartida + "\n\
 Nº Usuaris: " + actualitzarNumusers + "\n\
 Dia: " + diaComplet + "\n\
-Hora: " + horaCompleta);
+Hora: " + horaCompleta +"\n\
+\n\
+Que dessitges fer ara?\n\
+/crearPartida (Crear una nova partida)\n\
+/buscarPartida (Buscar una nova partida)\n\
+/nivell (Canviar el teu nivell)\n\
+/lesMeuesPartides (Veure les partides on t'has unit)\n\
+/ajuda (Llistat d'ajuda)\n\
+");
 
             } else {
                 ctx.editMessageText("No el pots donar d'alta en la partida " + descripcionPartida + ", ja que t'has dona d'alta anteriorment.");
@@ -269,8 +297,9 @@ Hora: " + horaCompleta);
 /crearPartida (Crear una nova partida)\n\
 /buscarPartida (Buscar una nova partida)\n\
 /nivell (Canviar el teu nivell)\n\
+/lesMeuesPartides (Veure les partides on t'has unit)\n\
 /ajuda (Llistat d'ajuda)\n\
-/parar (Finalitzar el bot)");
+");
             }
 
         });
