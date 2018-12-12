@@ -92,31 +92,31 @@ bot.command('start', ctx => {
     /* ===== Crear Partida =====  */
     bot.command('crearPartida', ctx => { //Crear una nova partida
         console.log("Vaig a crear una partida");
-         ctx.reply("Vas a crear una nova partida, per a fer-ho has de fer-ho de la següent manera:\n\
+        ctx.reply("Vas a crear una nova partida, per a fer-ho has de fer-ho de la següent manera:\n\
  \n\
  /novaPartida *Descripcio partida *data i hora\n\
 \n\
 Exemple:\n\
 \n\
 /novaPartida *Partida Gandia *2018-12-5 17:30");
-        
-         
-          bot.command(['novaPartida'], ctx => {
-              usuariService.getUserByID(ctx.from.id).then(data => {
-                console.log("dins de nova partida i l'usuari ha dit:", ctx.message.text); 
-                
-               
+
+
+        bot.command(['novaPartida'], ctx => {
+            usuariService.getUserByID(ctx.from.id).then(data => {
+                console.log("dins de nova partida i l'usuari ha dit:", ctx.message.text);
+
+
                 var nivellUsuari = data[0].users_levels_id;
-                
-                var contestacioUsuari= ctx.message.text;
+
+                var contestacioUsuari = ctx.message.text;
                 var tallarContestacio = contestacioUsuari.split("*");
-                
+
                 var descripcioPartida = tallarContestacio[1];
                 var dataPartida = tallarContestacio[2];
-                
-                console.log("Descripcio partida: ", descripcioPartida, " data: " , dataPartida);
-                
-                
+
+                console.log("Descripcio partida: ", descripcioPartida, " data: ", dataPartida);
+
+
                 partidesService.crearPartida(descripcioPartida, dataPartida, nivellUsuari);
                 ctx.reply("Partida creada correctament! 🎉 \n\
 \n\Que dessitges fer ara?\n\
@@ -126,10 +126,10 @@ Exemple:\n\
 /lesMeuesPartides (Veure les partides on t'has unit)\n\
 /ajuda (Llistat d'ajuda)\n\
 ");
-                
+
             });
-             
-          });
+
+        });
 
     });
 
@@ -227,19 +227,41 @@ Totes les partides: /totesPartides");
 /lesMeuesPartides (Veure les partides on t'has unit)");
 
     });
-    
+
     bot.command('lesMeuesPartides', ctx => {
-         usuariService.getUserByID(ctx.from.id).then(data => {
-             console.log(data);
-             
-         });
+        usuariService.getUserByID(ctx.from.id).then(data => {
+            console.log("User: ", data);
+            var userId = ctx.from.id;
+
+            partidesUsersService.getPartidasByUser(userId).then(data => {
+                console.log(data);
+
+                if (data.length === 0) { // No tens cap partida amb el teu nivell 
+                    ctx.reply("No estas en cap partida. Si vols pots /crearPartida o /buscarPartida");
+                } else {
+                    ctx.reply("Aquestes son les partides en les que t'has unit.");
+                    for (var i = 0; i < data.length; i++) {
+                        var numPartida = i+1;
+                        var dataPartida = new Date(data[i].partides_data);
+                        ctx.replyWithHTML("<b> "+numPartida + "- " + data[i].partides_descripcio + "</b> \n\
+<b>Dia:</b> " + dataPartida.getDay()+ "-" + dataPartida.getMonth()+"-"+ dataPartida.getFullYear() + " \n\
+<b>Hora:</b> "+ dataPartida.getHours() +":"+ dataPartida.getMinutes()+"\n\
+<b>Numero de jugadors:</b> " + data[i].partides_num_jugadors);
+                    }
+                }
+
+            });
+
+        });
+
+
 
     });
-    
-    
-    
-    
-    
+
+
+
+
+
 }); //***------Final START-----------------------
 
 
@@ -258,9 +280,9 @@ function partidaSeleccionada(ctx, data) {
         var numJugadors = data.partides_num_jugadors;
         var fechaPartida = data.partides_data;
 
-       
-        
-        
+
+
+
         var nuevaFecha = new Date(data.partides_data);
         var diaComplet = "" + nuevaFecha.getDate() + "-" + (nuevaFecha.getMonth() + 1) + "-" + nuevaFecha.getFullYear();
         var horaCompleta = "" + nuevaFecha.getHours() + ":" + nuevaFecha.getMinutes() + ":" + nuevaFecha.getSeconds() + "";
@@ -275,13 +297,13 @@ function partidaSeleccionada(ctx, data) {
             if (data === null) { // No estas en eixa partida aixi que vaig afegirte
                 partidesService.updatePartida(codiPartida[1], numJugadors); //Actualitza en la taula partida i suma un jugador         
                 partidesService.afegirPartidesUsers(codiPartida[1], ctx.from.id); //Afegisc l'usuari i la partida en la taula usuarisPartides
-               var actualitzarNumusers = numJugadors + 1;
+                var actualitzarNumusers = numJugadors + 1;
                 ctx.editMessageText('Partida seleccionada! 🎉 \n\
             \n\
 Descripció de la partida: ' + descripcionPartida + "\n\
 Nº Usuaris: " + actualitzarNumusers + "\n\
 Dia: " + diaComplet + "\n\
-Hora: " + horaCompleta +"\n\
+Hora: " + horaCompleta + "\n\
 \n\
 Que dessitges fer ara?\n\
 /crearPartida (Crear una nova partida)\n\
