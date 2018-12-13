@@ -63,6 +63,7 @@ bot.command('start', ctx => {
 /buscarPartida\n\
 /nivell\n\
 /lesMeuesPartides\n\
+/desunirsePartida\n\
 /ajuda\n\
 ");
             }
@@ -85,6 +86,7 @@ bot.command('start', ctx => {
 /buscarPartida\n\
 /nivell\n\
 /lesMeuesPartides\n\
+/desunirsePartida\n\
 /ajuda)\n\
 ");
     });
@@ -142,13 +144,14 @@ Exemple:\n\
 
                     } else {
                         partidesService.crearPartida(descripcioPartida, dataPartida, nivellUsuari);
-                        
+
                         ctx.reply("Partida creada correctament! 🎉 \n\
 \n\Que dessitges fer ara?\n\
 /crearPartida\n\
 /buscarPartida\n\
 /nivell\n\
 /lesMeuesPartides\n\
+/desunirsePartida\n\
 /ajuda\n\
 ");
 
@@ -260,7 +263,8 @@ Totes les partides: /totesPartides");
 /crearPartida (Crear una nova partida)\n\
 /buscarPartida (Buscar una nova partida)\n\
 /nivell (Canviar el teu nivell)\n\
-/lesMeuesPartides (Veure les partides on t'has unit)");
+/lesMeuesPartides (Veure les partides on t'has unit)\n\
+/desunirsePartida (Llevar-se d'una partida)");
 
     });
 
@@ -290,6 +294,35 @@ Totes les partides: /totesPartides");
 
     });
 
+    bot.command('desunirsePartida', ctx => {
+        usuariService.getUserByID(ctx.from.id).then(data => {
+            var userId = ctx.from.id;
+
+            partidesUsersService.getPartidasByUser(userId).then(data => {
+                if (data.length === 0) { // No tens cap partida amb el teu nivell 
+                    ctx.reply("No estas en cap partida, aleshores no pots desunirte. Si vols pots /crearPartida o /buscarPartida");
+                } else {
+                    var myData = [];
+                    for (var i = 0; i < data.length; i++) {
+                        var lista = [];
+                        var dataArray = [];
+                        lista.push(Markup.callbackButton(data[i].partides_descripcio + " - " + data[i].partides_num_jugadors + " jugadors \n", "eliminarPartida-" + data[i].partides_id)); // add at the end 
+                        myData.push(lista);
+                    }
+
+                    ctx.telegram.sendMessage(
+                            ctx.from.id,
+                            'Ací tens totes les partides disponibles:',
+                            Markup.inlineKeyboard(
+                                    myData
+                                    ).extra()
+                            );
+                }
+            });
+
+        });
+    });
+
 
 
 
@@ -301,20 +334,33 @@ bot.action(/partida+/, (ctx, next) => {
     partidaSeleccionada(ctx, ctx.callbackQuery.data);
 });
 
+bot.action(/eliminarPartida+/, (ctx, next) => {
+    eliminarUsuariPartida(ctx, ctx.callbackQuery.data);
+});
+
+function eliminarUsuariPartida(ctx, data) {
+
+    var codiPartida = data.split("-");
+   
+    usuariService.getUserByID(ctx.from.id).then(data => {
+        partidesUsersService.borrarPartida(ctx.from.id, codiPartida[1]);
+    });
+
+
+
+}
+
 
 
 function partidaSeleccionada(ctx, data) {
     var codiPartida = data.split("-", 3);
-
     partidesService.getPartidaID(codiPartida[1]).then(data => {
         var descripcionPartida = data.partides_desc;
         var numJugadors = data.partides_num_jugadors;
         var fechaPartida = data.partides_data;
-
         var nuevaFecha = new Date(data.partides_data);
         var diaComplet = "" + nuevaFecha.getDate() + "-" + (nuevaFecha.getMonth() + 1) + "-" + nuevaFecha.getFullYear();
         var horaCompleta = "" + nuevaFecha.getHours() + ":" + nuevaFecha.getMinutes() + ":" + nuevaFecha.getSeconds() + "";
-
         // Comprove que l'usuari no existeix en eixa partida
         // partidesUsuaris tindre que fer un select amb l'id del usuari i la partida
         partidesService.getPartidaUsuarisBYUsuariPartida(ctx.from.id, codiPartida[1]).then(data => {
@@ -335,9 +381,9 @@ Que dessitges fer ara?\n\
 /buscarPartida\n\
 /nivell\n\
 /lesMeuesPartides\n\
+/desunirsePartida\n\
 /ajuda\n\
 ");
-
             } else {
                 ctx.editMessageText("No el pots donar d'alta en la partida " + descripcionPartida + ", ja que t'has dona d'alta anteriorment.");
                 ctx.reply("Que dessitges fer ara?\n\
@@ -345,6 +391,7 @@ Que dessitges fer ara?\n\
 /buscarPartida\n\
 /nivell\n\
 /lesMeuesPartides\n\
+/desunirsePartida\n\
 /ajuda\n\
 ");
             }
