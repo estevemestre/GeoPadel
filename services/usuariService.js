@@ -77,7 +77,7 @@ function getUserByID(users_id) {
 }
 
 function saveUser(usuari) {
-    console.log("entrem en guardar usuari");
+//    console.log("entrem en guardar usuari");
 
     var sql = "INSERT INTO users (users_id, users_first_name, users_last_name, users_username) VALUES ('" + usuari.from.id + "', '" + usuari.from.first_name + "', '" + usuari.from.last_name + "', '" + usuari.from.username + "')";
 

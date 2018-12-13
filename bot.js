@@ -35,9 +35,8 @@ bot.command('start', ctx => {
     usuariService.getUserByID(ctx.from.id).then(data => {
         if (data === null) { // No te cap nivell
             console.log("No he trobat a cap usuari, vaig a insertar-lo");
-            //Insert 
+            //Inserte l'usuari en la Base de dades
             usuariService.saveUser(ctx.message);
-//    
             usuariActual = [{
                     "users_id": ctx.message.from.id,
                     "users_first_name": ctx.message.from.first_name,
@@ -48,6 +47,8 @@ bot.command('start', ctx => {
                 }];
 //            usuariActual = dadesUserActual[0];
             ctx.reply("Benvingut " + ctx.message.from.first_name + " a GeoPadel. Quin nivell tens? ( /avancat /intermig /principiant ) ");
+
+
         } else { // Per obligar l'usuari que es logeje
 
             usuariActual = data[0];
@@ -58,11 +59,11 @@ bot.command('start', ctx => {
                 var nom = ctx.message.from.first_name;
                 console.log("Si que he trobat al usuari: ", nom);
                 ctx.reply("Benvingut/da de nou, " + nom + ". Qué dessitges fer?\n\
-/crearPartida (Crear una nova partida)\n\
-/buscarPartida (Buscar una nova partida)\n\
-/nivell (Canviar el teu nivell)\n\
-/lesMeuesPartides (Veure les partides on t'has unit)\n\
-/ajuda (Llistat d'ajuda)\n\
+/crearPartida\n\
+/buscarPartida\n\
+/nivell\n\
+/lesMeuesPartides\n\
+/ajuda\n\
 ");
             }
         }
@@ -76,16 +77,15 @@ bot.command('start', ctx => {
 
 
     bot.command(['principiant', 'intermig', 'avancat'], ctx => {
+        //Consulta bd per a actualitzar el nivell
         usuariService.setLevelByID(ctx.from.id, ctx.message.text);
-//        // EMPALMAR LAVARIABLE QUE ELL ENS ENVIA
-//        usuariActual.users_levels_desc = ctx.message.text;
         ctx.reply("Nivell modificat correctament. Que dessitges fer ara?\n\
 \n\
-/crearPartida (Crear una nova partida)\n\
-/buscarPartida (Buscar una nova partida)\n\
-/nivell (Canviar el teu nivell)\n\
-/lesMeuesPartides (Veure les partides on t'has unit)\n\
-/ajuda (Llistat d'ajuda)\n\
+/crearPartida\n\
+/buscarPartida\n\
+/nivell\n\
+/lesMeuesPartides\n\
+/ajuda)\n\
 ");
     });
 
@@ -105,7 +105,6 @@ Exemple:\n\
             usuariService.getUserByID(ctx.from.id).then(data => {
                 console.log("dins de nova partida i l'usuari ha dit:", ctx.message.text);
 
-
                 var nivellUsuari = data[0].users_levels_id;
 
                 var contestacioUsuari = ctx.message.text;
@@ -114,19 +113,58 @@ Exemple:\n\
                 var descripcioPartida = tallarContestacio[1];
                 var dataPartida = tallarContestacio[2];
 
+                console.log("tallarDescripcio", tallarContestacio.length);
+
                 console.log("Descripcio partida: ", descripcioPartida, " data: ", dataPartida);
 
+                if (tallarContestacio.length === 3) {
 
-                partidesService.crearPartida(descripcioPartida, dataPartida, nivellUsuari);
-                ctx.reply("Partida creada correctament! 🎉 \n\
+                    var separacionStringDataPartida = dataPartida.split(" ");
+                    var separacionFecha = separacionStringDataPartida[0].split("-");
+                    var separacionHora = separacionStringDataPartida[1].split(":");
+
+                    var any = parseInt(separacionFecha[0]);
+                    var mes = parseInt(separacionFecha[1]);
+                    var dia = parseInt(separacionFecha[2]);
+                    var hora = parseInt(separacionHora[0]);
+                    var minutos = parseInt(separacionHora[1]);
+
+                    if (Number.isNaN(any) && Number.isNaN(mes) && Number.isNaN(dia) && Number.isNaN(hora) && Number.isNaN(minutos)) {
+                        console.log("No soy un numero :(");
+
+                        ctx.reply("No has insertat correctament les dades, per a fer-ho has de fer-ho de la següent manera:\n\
+\n\
+/novaPartida *Descripcio partida *data i hora\n\
+\n\
+Exemple:\n\
+\n\
+/novaPartida *Partida Gandia *2018-12-5 17:30");
+
+                    } else {
+                        partidesService.crearPartida(descripcioPartida, dataPartida, nivellUsuari);
+                        
+                        ctx.reply("Partida creada correctament! 🎉 \n\
 \n\Que dessitges fer ara?\n\
-/crearPartida (Crear una nova partida)\n\
-/buscarPartida (Buscar una nova partida)\n\
-/nivell (Canviar el teu nivell)\n\
-/lesMeuesPartides (Veure les partides on t'has unit)\n\
-/ajuda (Llistat d'ajuda)\n\
+/crearPartida\n\
+/buscarPartida\n\
+/nivell\n\
+/lesMeuesPartides\n\
+/ajuda\n\
 ");
 
+                    }
+
+
+                } else {
+                    ctx.reply("No has insertat correctament les dades, per a fer-ho has de fer-ho de la següent manera:\n\
+\n\
+/novaPartida *Descripcio partida *data i hora\n\
+\n\
+Exemple:\n\
+\n\
+/novaPartida *Partida Gandia *2018-12-5 17:30");
+
+                }
             });
 
         });
@@ -186,9 +224,7 @@ Totes les partides: /totesPartides");
         /* ===== Buscar totes les partides =====  */
         bot.command(['totesPartides'], ctx => {
             usuariService.getUserByID(ctx.from.id).then(data => {
-
                 //Si ho poses recorda comprovar que la data[0] no siga null per que aixo voldra dir que eixe usuari no apretat el starte i  ademes comprova tambe que el data[0].level_id es diferent que 0 si nos voldra dir que eixe usuari esta donat d'alta pero no a selecionat el nivell
-
                 partidesService.getPartides(data[0].users_levels_id).then(data => {
                     if (data.length === 0) { // No tens cap partida amb el teu nivell 
                         ctx.reply("No he trobat cap partida per poder jugar, si vols pots crear una partida:  /crearPartida");
@@ -239,19 +275,15 @@ Totes les partides: /totesPartides");
                 if (data.length === 0) { // No tens cap partida amb el teu nivell 
                     ctx.reply("No estas en cap partida. Si vols pots /crearPartida o /buscarPartida");
                 } else {
-                    ctx.reply("Aquestes son les partides en les que t'has unit.");
                     for (var i = 0; i < data.length; i++) {
-                        var numPartida = i+1;
                         var dataPartida = new Date(data[i].partides_data);
-                        ctx.replyWithHTML("<b> "+numPartida + "- " + data[i].partides_descripcio + "</b> \n\
-<b>Dia:</b> " + dataPartida.getDay()+ "-" + dataPartida.getMonth()+"-"+ dataPartida.getFullYear() + " \n\
-<b>Hora:</b> "+ dataPartida.getHours() +":"+ dataPartida.getMinutes()+"\n\
+                        ctx.replyWithHTML("<b>" + data[i].partides_descripcio + "</b> \n\
+<b>Dia:</b> " + dataPartida.getDay() + "-" + dataPartida.getMonth() + "-" + dataPartida.getFullYear() + " \n\
+<b>Hora:</b> " + dataPartida.getHours() + ":" + dataPartida.getMinutes() + "\n\
 <b>Numero de jugadors:</b> " + data[i].partides_num_jugadors);
                     }
                 }
-
             });
-
         });
 
 
@@ -274,21 +306,14 @@ bot.action(/partida+/, (ctx, next) => {
 function partidaSeleccionada(ctx, data) {
     var codiPartida = data.split("-", 3);
 
-
     partidesService.getPartidaID(codiPartida[1]).then(data => {
         var descripcionPartida = data.partides_desc;
         var numJugadors = data.partides_num_jugadors;
         var fechaPartida = data.partides_data;
 
-
-
-
         var nuevaFecha = new Date(data.partides_data);
         var diaComplet = "" + nuevaFecha.getDate() + "-" + (nuevaFecha.getMonth() + 1) + "-" + nuevaFecha.getFullYear();
         var horaCompleta = "" + nuevaFecha.getHours() + ":" + nuevaFecha.getMinutes() + ":" + nuevaFecha.getSeconds() + "";
-
-
-
 
         // Comprove que l'usuari no existeix en eixa partida
         // partidesUsuaris tindre que fer un select amb l'id del usuari i la partida
@@ -306,21 +331,21 @@ Dia: " + diaComplet + "\n\
 Hora: " + horaCompleta + "\n\
 \n\
 Que dessitges fer ara?\n\
-/crearPartida (Crear una nova partida)\n\
-/buscarPartida (Buscar una nova partida)\n\
-/nivell (Canviar el teu nivell)\n\
-/lesMeuesPartides (Veure les partides on t'has unit)\n\
-/ajuda (Llistat d'ajuda)\n\
+/crearPartida\n\
+/buscarPartida\n\
+/nivell\n\
+/lesMeuesPartides\n\
+/ajuda\n\
 ");
 
             } else {
                 ctx.editMessageText("No el pots donar d'alta en la partida " + descripcionPartida + ", ja que t'has dona d'alta anteriorment.");
                 ctx.reply("Que dessitges fer ara?\n\
-/crearPartida (Crear una nova partida)\n\
-/buscarPartida (Buscar una nova partida)\n\
-/nivell (Canviar el teu nivell)\n\
-/lesMeuesPartides (Veure les partides on t'has unit)\n\
-/ajuda (Llistat d'ajuda)\n\
+/crearPartida)\n\
+/buscarPartida\n\
+/nivell\n\
+/lesMeuesPartides\n\
+/ajuda\n\
 ");
             }
 

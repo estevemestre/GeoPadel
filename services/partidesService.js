@@ -88,33 +88,19 @@ function getPartidesData(idNivell, data) {
         return null;
 
     } else {
-        console.log("Si soy un numeeeero");
+//        console.log("Si soy un numeeeero");
         fechaCompletaInicio = new Date(any, mes, dia, 0, 0, 0);
         fechaCompletaFin = new Date(any, mes, dia, 23, 59, 59);
-//        console.log("Completita aqui", fechaCompletaInicio.getFullYear(), "-", fechaCompletaInicio.getMonth(), "-",
-//                fechaCompletaInicio.getDate(), " AHORA hora ", fechaCompletaInicio.getHours(), ":", fechaCompletaInicio.getMinutes());
-
-//var consulta = "SELECT * FROM partides WHERE partides_num_jugadors < 4 AND partides_levels_id = " + idNivell + " AND partides_data BETWEEN '" +
-//                    fechaCompletaInicio.getFullYear() + "-" + fechaCompletaInicio.getMonth() + "-" + fechaCompletaInicio.getDate() + " " +
-//                    fechaCompletaInicio.getHours() + ":" + fechaCompletaInicio.getMinutes() + ":" + fechaCompletaInicio.getSeconds() + "' AND '" +
-//                    fechaCompletaFin.getFullYear() + "-" + fechaCompletaFin.getMonth() + "-" + fechaCompletaFin.getDate() + " " +
-//                    fechaCompletaFin.getHours() + ":" + fechaCompletaFin.getMinutes() + ":" + fechaCompletaFin.getSeconds()+ "'";
-//                   
-//console.log("CONSULTA", consulta);
-
 
         return new Promise(resolve => {
-            // QUIN NIVELL TE EL USUARI ???
             con.query("SELECT * FROM partides WHERE partides_num_jugadors < 4 AND partides_levels_id = " + idNivell + " AND partides_data BETWEEN '" +
                     fechaCompletaInicio.getFullYear() + "-" + fechaCompletaInicio.getMonth() + "-" + fechaCompletaInicio.getDate() + " " +
                     fechaCompletaInicio.getHours() + ":" + fechaCompletaInicio.getMinutes() + ":" + fechaCompletaInicio.getSeconds() + "' AND '" +
                     fechaCompletaFin.getFullYear() + "-" + fechaCompletaFin.getMonth() + "-" + fechaCompletaFin.getDate() + " " +
                     fechaCompletaFin.getHours() + ":" + fechaCompletaFin.getMinutes() + ":" + fechaCompletaFin.getSeconds() + "'",
                     function (err, result, fields) {
-
                         if (err)
                             throw err;
-                        /// nomdelmetode.responseData() {sdSADDSAASD} 
                         Object.keys(result).forEach(function (key) {
                             var row = result[key];
 
@@ -260,22 +246,18 @@ function setLevelByID(users_id, missatge) {
 }
 
 function crearPartida(descripcioPartida, dataPartida, nivellUsuari) {
-    console.log("En crear partida");
-    console.log("Descripcio partida: ", descripcioPartida, " data: ", dataPartida, " nivell: ", nivellUsuari);
-    var sql = "INSERT INTO partides (partides_id, partides_desc, partides_num_jugadors, partides_pistes_id, partides_levels_id, partides_data) VALUES (NULL, '" + descripcioPartida + "' , '0', '1', '" + nivellUsuari + "', '" + dataPartida + "')";
+//    console.log("En crear partida");
+//    console.log("Descripcio partida: ", descripcioPartida, " data: ", dataPartida, " nivell: ", nivellUsuari);
 
+
+    var sql = "INSERT INTO partides (partides_id, partides_desc, partides_num_jugadors, partides_pistes_id, partides_levels_id, partides_data) VALUES (NULL, '" + descripcioPartida + "' , '0', '1', '" + nivellUsuari + "', '" + dataPartida + "')";
     con.query(sql, function (err, result) {
         if (err)
             throw err;
     });
 
 
-//    ctx.reply("Descripció de ");
-//    var sql;
-//    con.query(sql, function (err, result) {
-//        if (err)
-//            throw err;
-//    });
+
 }
 
 
